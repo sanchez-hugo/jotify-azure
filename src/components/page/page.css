@@ -1,0 +1,65 @@
+.page-light {
+  background-color: #f8f9fa !important;
+  color: #212529;
+}
+
+.page-dark {
+  background-color: #212529 !important;
+  color: #f8f9fa;
+}
+
+.page-text-light {
+  appearance: none;
+  background: transparent;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  caret-color: #212529;
+  /* user-select: auto; */
+  color: #212529;
+  width: 100%;
+  min-height: 80vh;
+  font-family: monospace;
+  font-size: 1.2em;
+  letter-spacing: 0.1em;
+  padding: 1em;
+  resize: none;
+}
+
+.page-text-dark {
+  appearance: none;
+  background: transparent;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  caret-color: #f8f9fa;
+  /* user-select: auto; */
+  color: #f8f9fa;
+  width: 100%;
+  min-height: 80vh;
+  font-family: monospace;
+  font-size: 1.2em;
+  letter-spacing: 0.1em;
+  padding: 1em;
+  resize: none;
+}
+
+textarea::-webkit-scrollbar {
+  background: transparent;
+  width: 0.25em;
+  padding-right: 4px;
+}
+
+textarea::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+textarea.page-text-light::-webkit-scrollbar-thumb {
+  background-color: #212529;
+  border-radius: 5px;
+}
+
+textarea.page-text-dark::-webkit-scrollbar-thumb {
+  background-color: #f8f9fa;
+  border-radius: 5px;
+}

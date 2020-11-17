@@ -1,0 +1,9 @@
+.nav-light {
+  background-color: #f8f9fa;
+  color: rgb(63, 63, 63);
+}
+
+.nav-dark {
+  background-color: #212529;
+  color: white;
+}
