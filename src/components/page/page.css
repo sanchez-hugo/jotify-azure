@@ -63,3 +63,33 @@ textarea.page-text-dark::-webkit-scrollbar-thumb {
   background-color: #f8f9fa;
   border-radius: 5px;
 }
+
+.page-msg-light {
+  appearance: none;
+  background: transparent;
+  outline: none;
+  border: none;
+  border-radius: 5px;
+  width: 100%;
+  color: #212529;
+  font-family: monospace;
+  font-size: 1.2em;
+  letter-spacing: 0.1em;
+  text-align: center;
+  padding: 1em;
+}
+
+.page-msg-dark {
+  appearance: none;
+  background: transparent;
+  outline: none;
+  border: none;
+  border-radius: 5px;
+  width: 100%;
+  color: #f8f9fa;
+  font-family: monospace;
+  font-size: 1.2em;
+  letter-spacing: 0.1em;
+  text-align: center;
+  padding: 1em;
+}
