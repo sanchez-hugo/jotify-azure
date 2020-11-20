@@ -11,7 +11,10 @@ class Page extends Component {
       lineCount: 0,
       syllableCount: 0,
     },
-    syllableResults: "",
+    results: {
+      syllableResults: "",
+      lineResults: "",
+    },
   };
 
   onTextChange = (e) => {
@@ -19,13 +22,30 @@ class Page extends Component {
     const { value } = event.target;
 
     if (value === "") this.resetState();
-    else this.setText(value);
+    else {
+      this.setText(value);
+      this.findCounts();
+    }
   };
 
   onTextKeyPress = () => {
     this.findCounts();
   };
 
+  onTextScroll = (e) => {
+    const target = e.target;
+    const { scrollTop } = target;
+    /**
+     * scrollTop: 905
+     * scrollLeft: 0
+     * scrollTop: 170
+     * scrollWidth: 869
+     */
+    let linesResult = document.getElementById("lines-result");
+    let syllablesResult = document.getElementById("syllables-result");
+    linesResult.scrollTop = scrollTop;
+    syllablesResult.scrollTop = scrollTop;
+  };
 
   findCounts = () => {
     const { text } = this.state;
@@ -47,7 +67,6 @@ class Page extends Component {
       if (singleLine !== "") {
         const singleLineArray = singleLine.split(" "); // array of words
         for (const word of singleLineArray) {
-          word.trim();
           if (word !== "") {
             wordCount++;
             wordsInLine++;
@@ -71,11 +90,11 @@ class Page extends Component {
       syllableCount,
     };
 
-    const syllableResults = this.findSyllableResults(lines);
-    this.setCounts(counts, lines, syllableResults);
+    const results = this.findResults(lines);
+    this.setCounts(counts, lines, results);
   };
 
-  findSyllableResults = (lines) => {
+  findResults = (lines) => {
     /**
      * lines: {
      *    id: number,
@@ -84,10 +103,16 @@ class Page extends Component {
      * }
      */
 
-    let results = "";
+    let syllableResults = "";
+    let lineResults = "";
+
     for (const line in lines) {
-      results += `${lines[line].syllables}\n`;
+      syllableResults += `${lines[line].syllables}\n`;
+      lineResults += `${lines[line].id}\n`;
     }
+
+    const results = { syllableResults, lineResults };
+
     return results;
   };
 
@@ -95,12 +120,12 @@ class Page extends Component {
     this.setState((prevState) => ({ ...prevState, text }));
   };
 
-  setCounts = (counts, lines, syllableResults) => {
+  setCounts = (counts, lines, results) => {
     this.setState((prevState) => ({
       ...prevState,
       counts,
       lines,
-      syllableResults,
+      results,
     }));
   };
 
@@ -112,14 +137,17 @@ class Page extends Component {
       lineCount: 0,
       syllableCount: 0,
     };
-    const syllableResults = "";
+    const results = {
+      syllablesResult: "",
+      linesResult: "",
+    };
 
     this.setState((prevState) => ({
       ...prevState,
       text,
       lines,
       counts,
-      syllableResults,
+      results,
     }));
   };
 
@@ -134,6 +162,10 @@ class Page extends Component {
       ? "page-text-light"
       : "page-text-dark";
 
+    const pageResultsClassName = isDefaultTheme
+      ? "page-results-light"
+      : "page-results-dark";
+
     const pageInputClassName = isDefaultTheme
       ? "page-msg-light"
       : "page-msg-dark";
@@ -144,13 +176,32 @@ class Page extends Component {
       <div className="">
         <div className="container-fluid pt-5">
           <div className="row justify-content-center">
+            <div className="col-md-1">
+              <p className="page-text-muted">Line</p>
+            </div>
+            <div className="col-md-8">
+              <p className="page-text-muted">Text</p>
+            </div>
+            <div className="col-md-1">
+              <p className="page-text-muted">Syllables</p>
+            </div>
+          </div>
+          <div className="row justify-content-center">
+            <div className="col-md-1">
+              <textarea
+                id="lines-result"
+                className={pageResultsClassName}
+                value={this.state.results.lineResults}
+                readOnly
+              />
+            </div>
             <div className={pageClassName}>
               <textarea
                 autoFocus
                 id="page-text"
                 className={pageTextClassName}
                 onChange={this.onTextChange}
-                onKeyPress={this.onTextKeyPress}
+                onScroll={this.onTextScroll}
               />
               <input
                 className={pageInputClassName}
@@ -162,10 +213,8 @@ class Page extends Component {
             <div className="col-md-1">
               <textarea
                 id="syllables-result"
-                className={pageTextClassName}
-                onChange={this.onTextChange}
-                onKeyPress={this.onTextKeyPress}
-                value={this.state.syllableResults}
+                className={pageResultsClassName}
+                value={this.state.results.syllableResults}
                 readOnly
               />
             </div>

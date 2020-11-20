@@ -44,20 +44,22 @@ const NavBar = (props) => {
   const onClearClick = (e) => {
     e.preventDefault();
     let pageText = document.getElementById("page-text");
-    pageText.value="";
-  }
-
+    let linesResult = document.getElementById("lines-result");
+    let syllablesResult = document.getElementById("syllables-result");
+    pageText.value = "";
+    linesResult.value = "";
+    syllablesResult.value = "";
+  };
 
   const onCopyClick = (e) => {
     e.preventDefault();
-    
+
     let pageText = document.getElementById("page-text");
     pageText.select();
     document.execCommand("copy");
     pageText.setSelectionRange(0, 0);
     pageText.blur();
-  }
-
+  };
 
   return (
     <nav

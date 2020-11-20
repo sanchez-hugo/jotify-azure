@@ -1,12 +1,14 @@
+const vowels = ["a","e","i","o","u","y"];
+
 const isCharSyllable = (letter) => {
+  // make sure already lowercase
   if (letter) {
-    const char = letter.toLowerCase();
-    if (char === "a") return true;
-    else if (char === "e") return true;
-    else if (char === "i") return true;
-    else if (char === "o") return true;
-    else if (char === "u") return true;
-    else if (char === "y") return true;
+    if (letter === "a") return true;
+    else if (letter === "e") return true;
+    else if (letter === "i") return true;
+    else if (letter === "o") return true;
+    else if (letter === "u") return true;
+    else if (letter === "y") return true;
   }
   return false;
 };
@@ -25,6 +27,8 @@ const countSyllablesInWord = (word) => {
   // returns number of syllables
   let syllables = 0;
   const limit = word.length;
+  word = word.toLowerCase();
+  word.replace(/[[\](){}?*+^$\\.|-]/g, "")
 
   for (let i = 0; i < limit; i++) {
     if (isCharSyllable(word[i])) {
@@ -36,6 +40,8 @@ const countSyllablesInWord = (word) => {
       if (thirdNext < limit) {
         if (word[i] === "a" && word[thirdNext] === "e") {
           if (fourthNext < limit && word[fourthNext] === "r");
+          else if (word[next] === "b" && word[secondNext] === "l");
+          else if (word[next] === "n" && word[secondNext] === "g");
           else continue;
         } else if (word[i] === "o" && word[thirdNext] === "e") {
           if (word[next] === "s" && word[secondNext] === "s") {
@@ -54,7 +60,8 @@ const countSyllablesInWord = (word) => {
           if (word[next] !== "k" && word[next] !== "l" && word[next] !== "c")
             continue;
         } else if (word[i] === "i" && word[secondNext] === "e") {
-          continue;
+          if (word[next] === "v" && word[limit - 1] !== "e");
+          else continue;
         } else if (word[i] === "u" && word[secondNext] === "e") {
           continue;
         } else if (
@@ -95,4 +102,26 @@ const countSyllablesInWord = (word) => {
   return syllables;
 };
 
-export { isCharSyllable, doesWordContainSyllable, countSyllablesInWord };
+const countSyllablesInWordV2 = (word) => {
+  if (!word) return 0;
+  word = word.toLowerCase(); //word.downcase!
+  let original = word;
+  if (word.length <= 2) {
+    return 1;
+  } //return 1 if word.length <= 3
+  word = word.replace(/(?:[^laeiouy]es|ed|[^laeiouy]e)$/, ""); //word.sub!(/(?:[^laeiouy]es|ed|[^laeiouy]e)$/, '')
+  word = word.replace(/^y/, ""); //word.sub!(/^y/, '')
+  let match = word.match(/[aeiouy]{1,2}/g); //word.scan(/[aeiouy]{1,2}/).size
+
+  let count = match ? match.length : 0;
+  
+  if (original.includes("ges")) count++;
+  return count;
+};
+
+export {
+  isCharSyllable,
+  doesWordContainSyllable,
+  countSyllablesInWord,
+  countSyllablesInWordV2,
+};
