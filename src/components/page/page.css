@@ -16,9 +16,14 @@
   /* user-select: auto; */
   color: #8d8d8d;
   font-family: monospace;
-  font-size: 1.0em;
+  font-size: 1em;
   letter-spacing: 0.1em;
-  padding: 0.0em;
+  padding-top: 1em;
+  padding-bottom: 1em;
+  padding-left: 0em;
+  padding-right: 0em;
+  width: 100%;
+  word-wrap: break-word;
 }
 
 .page-text-light {
@@ -31,12 +36,12 @@
   /* user-select: auto; */
   color: #212529;
   width: 100%;
-  min-height: 75vh;
+  min-height: 65vh;
   font-family: monospace;
   font-size: 1.2em;
   letter-spacing: 0.1em;
-  padding: 1em;
   resize: none;
+  white-space: nowrap;
 }
 
 .page-text-dark {
@@ -49,16 +54,17 @@
   /* user-select: auto; */
   color: #f8f9fa;
   width: 100%;
-  min-height: 75vh;
+  min-height: 65vh;
   font-family: monospace;
   font-size: 1.2em;
   letter-spacing: 0.1em;
-  padding: 1em;
   resize: none;
+  white-space: nowrap;
 }
 
 textarea::-webkit-scrollbar {
   background: transparent;
+  height: 0.25em;
   width: 0.25em;
   padding-right: 4px;
 }
@@ -82,14 +88,12 @@ textarea.page-text-dark::-webkit-scrollbar-thumb {
   background: transparent;
   outline: none;
   border: none;
-  border-radius: 5px;
-  width: 100%;
   color: #212529;
   font-family: monospace;
-  font-size: 1.2em;
+  font-size: 1.1em;
   letter-spacing: 0.1em;
   text-align: center;
-  padding: 1em;
+  padding-top: 1em;
 }
 
 .page-msg-dark {
@@ -97,14 +101,12 @@ textarea.page-text-dark::-webkit-scrollbar-thumb {
   background: transparent;
   outline: none;
   border: none;
-  border-radius: 5px;
-  width: 100%;
   color: #f8f9fa;
   font-family: monospace;
-  font-size: 1.2em;
+  font-size: 1.1em;
   letter-spacing: 0.1em;
   text-align: center;
-  padding: 1em;
+  padding-top: 1em;
 }
 
 .page-results-light {
@@ -116,11 +118,11 @@ textarea.page-text-dark::-webkit-scrollbar-thumb {
   caret-color: #212529;
   color: #212529;
   width: 100%;
-  min-height: 75vh;
+  min-height: 65vh;
   font-family: monospace;
   font-size: 1.2em;
   letter-spacing: 0.1em;
-  padding: 1em;
+  overflow: hidden;
   resize: none;
 }
 
@@ -133,14 +135,15 @@ textarea.page-text-dark::-webkit-scrollbar-thumb {
   caret-color: #f8f9fa;
   color: #f8f9fa;
   width: 100%;
-  min-height: 75vh;
+  min-height: 65vh;
   font-family: monospace;
   font-size: 1.2em;
   letter-spacing: 0.1em;
-  padding: 1em;
+  overflow: hidden;
   resize: none;
 }
 
-.page-results-light, .page-results-dark::-webkit-scrollbar {
+.page-results-light,
+.page-results-dark::-webkit-scrollbar {
   width: none;
 }

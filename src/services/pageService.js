@@ -1,4 +1,4 @@
-const vowels = ["a","e","i","o","u","y"];
+const vowels = ["a", "e", "i", "o", "u", "y"];
 
 const isCharSyllable = (letter) => {
   // make sure already lowercase
@@ -28,7 +28,7 @@ const countSyllablesInWord = (word) => {
   let syllables = 0;
   const limit = word.length;
   word = word.toLowerCase();
-  word.replace(/[[\](){}?*+^$\\.|-]/g, "")
+  word = word.replace(/[^a-z]/g, "");
 
   for (let i = 0; i < limit; i++) {
     if (isCharSyllable(word[i])) {
@@ -41,8 +41,10 @@ const countSyllablesInWord = (word) => {
         if (word[i] === "a" && word[thirdNext] === "e") {
           if (fourthNext < limit && word[fourthNext] === "r");
           else if (word[next] === "b" && word[secondNext] === "l");
-          else if (word[next] === "n" && word[secondNext] === "g");
-          else continue;
+          else if (word[next] === "n" && word[secondNext] === "g") {
+            if (word.substring(limit - 2) === "es");
+            else continue;
+          } else continue;
         } else if (word[i] === "o" && word[thirdNext] === "e") {
           if (word[next] === "s" && word[secondNext] === "s") {
             if (fourthNext < limit && word[fourthNext] === "s");
@@ -60,7 +62,8 @@ const countSyllablesInWord = (word) => {
           if (word[next] !== "k" && word[next] !== "l" && word[next] !== "c")
             continue;
         } else if (word[i] === "i" && word[secondNext] === "e") {
-          if (word[next] === "v" && word[limit - 1] !== "e");
+          if (secondNext === limit - 1) continue;
+          else if (word[next] === "v" && word[limit - 1] !== "e");
           else continue;
         } else if (word[i] === "u" && word[secondNext] === "e") {
           continue;
@@ -114,7 +117,7 @@ const countSyllablesInWordV2 = (word) => {
   let match = word.match(/[aeiouy]{1,2}/g); //word.scan(/[aeiouy]{1,2}/).size
 
   let count = match ? match.length : 0;
-  
+
   if (original.includes("ges")) count++;
   return count;
 };

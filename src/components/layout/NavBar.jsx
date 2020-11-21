@@ -16,15 +16,16 @@ const NavBar = (props) => {
   const [isNavbarCollapsed, setIsNavbarCollapsed] = useState(true);
   const [showDefaultTheme, setShowDefaultTheme] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isNavMenuOpen, setIsNavMenuOpen] = useState(false);
 
-  const onNavMenuClick = (e) => {
+  const onNavbarClick = (e) => {
     e.preventDefault();
     setIsNavbarCollapsed(!isNavbarCollapsed);
   };
 
   const onBackgroundClick = () => {
     setShowDefaultTheme(!showDefaultTheme);
-    props.handleBackgroundClick();
+    props.toggleBackground();
   };
 
   const onExpandClick = () => {
@@ -61,12 +62,25 @@ const NavBar = (props) => {
     pageText.blur();
   };
 
+  const onNavMenuClick = (e) => {
+    e.preventDefault();
+    setIsNavMenuOpen(!isNavMenuOpen);
+  };
+
+  const onToggleLinesClick = () => {
+    props.toggleLines();
+  };
+
+  const onToggleSyllablesClick = () => {
+    props.toggleSyllables();
+  };
+
   return (
     <nav
       className={
         showDefaultTheme
-          ? "navbar navbar-expand-md navbar-light nav-light"
-          : "navbar navbar-expand-md navbar-dark nav-dark"
+          ? "navbar navbar-expand-sm navbar-light nav-light"
+          : "navbar navbar-expand-sm navbar-dark nav-dark"
       }
     >
       <span className="text-muted pr-3">react-pages</span>
@@ -80,7 +94,7 @@ const NavBar = (props) => {
         aria-controls="navbarSupportedContent"
         aria-expanded={isNavbarCollapsed ? "false" : "true"}
         aria-label="Toggle navigation"
-        onClick={onNavMenuClick}
+        onClick={onNavbarClick}
       >
         <span className="navbar-toggler-icon"></span>
       </button>
@@ -122,7 +136,7 @@ const NavBar = (props) => {
         </ul>
 
         <ul className="navbar-nav">
-          <div className="row justify-content-center text-center">
+          <div className={"row justify-content-center text-center"}>
             <li className="nav-item col" onClick={onBackgroundClick}>
               <span className="nav-link" role="button">
                 <BsCircleHalf />
@@ -138,10 +152,41 @@ const NavBar = (props) => {
                 <BsInfoCircleFill />
               </span>
             </li>
-            <li className="nav-item col">
-              <span className="nav-link" role="button">
+            <li
+              className={
+                isNavMenuOpen
+                  ? "nav-item col dropdown show"
+                  : "nav-item col dropdown"
+              }
+            >
+              <span
+                id="navbarDropdown"
+                className="nav-link dropdown-toggle"
+                role="button"
+                aria-haspopup="true"
+                aria-expanded={isNavMenuOpen ? "true" : "false"}
+                onClick={onNavMenuClick}
+              >
                 <BsThreeDots />
               </span>
+              <div
+                className={
+                  isNavMenuOpen
+                    ? "dropdown-menu dropdown-menu-right show"
+                    : "dropdown-menu dropdown-menu-right"
+                }
+                aria-labelledby="navbarDropdown"
+              >
+                <button className="dropdown-item" onClick={onToggleLinesClick}>
+                  Toggle Lines
+                </button>
+                <button
+                  className="dropdown-item"
+                  onClick={onToggleSyllablesClick}
+                >
+                  Toggle Syllables
+                </button>
+              </div>
             </li>
           </div>
         </ul>

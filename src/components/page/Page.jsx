@@ -41,10 +41,15 @@ class Page extends Component {
      * scrollTop: 170
      * scrollWidth: 869
      */
-    let linesResult = document.getElementById("lines-result");
-    let syllablesResult = document.getElementById("syllables-result");
-    linesResult.scrollTop = scrollTop;
-    syllablesResult.scrollTop = scrollTop;
+    if (this.props.showLines) {
+      let linesResult = document.getElementById("lines-result");
+      linesResult.scrollTop = scrollTop;
+    }
+
+    if (this.props.showSyllables) {
+      let syllablesResult = document.getElementById("syllables-result");
+      syllablesResult.scrollTop = scrollTop;
+    }
   };
 
   findCounts = () => {
@@ -154,9 +159,7 @@ class Page extends Component {
   render() {
     const { isDefaultTheme } = this.props;
 
-    const pageClassName = isDefaultTheme
-      ? "col-md-8 page-light"
-      : "col-md-8 page-dark";
+    const pageClassName = isDefaultTheme ? "page-light" : "page-dark";
 
     const pageTextClassName = isDefaultTheme
       ? "page-text-light"
@@ -173,44 +176,44 @@ class Page extends Component {
     const pageMsg = `${this.state.counts.wordCount} words`;
 
     return (
-      <div className="">
-        <div className="container-fluid pt-5">
-          <div className="row justify-content-center">
-            <div className="col-md-1">
-              <p className="page-text-muted">Line</p>
+      <>
+        <div className="row justify-content-center">
+          {this.props.showLines ? (
+            <div className="col-2 px-0">
+              <p className="page-text-muted text-right">Line</p>
             </div>
-            <div className="col-md-8">
-              <p className="page-text-muted">Text</p>
-            </div>
-            <div className="col-md-1">
+          ) : null}
+          <div className="col px-md-3">
+            <p className="page-text-muted">Text</p>
+          </div>
+          {this.props.showSyllables ? (
+            <div className="col-2 px-0">
               <p className="page-text-muted">Syllables</p>
             </div>
-          </div>
-          <div className="row justify-content-center">
-            <div className="col-md-1">
+          ) : null}
+        </div>
+        <div className="row justify-content-center">
+          {this.props.showLines ? (
+            <div className="col-2 px-0">
               <textarea
                 id="lines-result"
-                className={pageResultsClassName}
+                className={pageResultsClassName + " text-right"}
                 value={this.state.results.lineResults}
                 readOnly
               />
             </div>
-            <div className={pageClassName}>
-              <textarea
-                autoFocus
-                id="page-text"
-                className={pageTextClassName}
-                onChange={this.onTextChange}
-                onScroll={this.onTextScroll}
-              />
-              <input
-                className={pageInputClassName}
-                type="text"
-                value={pageMsg}
-                readOnly
-              />
-            </div>
-            <div className="col-md-1">
+          ) : null}
+          <div className={"col px-md-3 " + pageClassName}>
+            <textarea
+              autoFocus
+              id="page-text"
+              className={pageTextClassName}
+              onChange={this.onTextChange}
+              onScroll={this.onTextScroll}
+            />
+          </div>
+          {this.props.showSyllables ? (
+            <div className="col-2 px-0">
               <textarea
                 id="syllables-result"
                 className={pageResultsClassName}
@@ -218,9 +221,17 @@ class Page extends Component {
                 readOnly
               />
             </div>
-          </div>
+          ) : null}
         </div>
-      </div>
+        <div className="row justify-content-center py-0">
+          <input
+            className={pageInputClassName}
+            type="text"
+            value={pageMsg}
+            readOnly
+          />
+        </div>
+      </>
     );
   }
 }
