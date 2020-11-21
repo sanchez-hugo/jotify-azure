@@ -3,12 +3,7 @@ const vowels = ["a", "e", "i", "o", "u", "y"];
 const isCharSyllable = (letter) => {
   // make sure already lowercase
   if (letter) {
-    if (letter === "a") return true;
-    else if (letter === "e") return true;
-    else if (letter === "i") return true;
-    else if (letter === "o") return true;
-    else if (letter === "u") return true;
-    else if (letter === "y") return true;
+    if (vowels.includes(letter)) return true;
   }
   return false;
 };
@@ -31,11 +26,46 @@ const countSyllablesInWord = (word) => {
   word = word.replace(/[^a-z]/g, "");
 
   for (let i = 0; i < limit; i++) {
+    /* Fear not, for this will all be refactored. */
     if (isCharSyllable(word[i])) {
       const next = i + 1;
       const secondNext = i + 2;
       const thirdNext = i + 3;
       const fourthNext = i + 4;
+      const fifthNext = i + 5;
+      // const sixthNext = i + 6;
+
+      // if (sixthNext < limit) {
+      // }
+
+      if (fifthNext < limit) {
+        if (
+          isCharSyllable(word[i]) &&
+          word[next] === "n" &&
+          word[secondNext] === "c" &&
+          word[thirdNext] === "h" &&
+          word[fourthNext] === "e" &&
+          word[fifthNext] === "d"
+        )
+          continue;
+      }
+
+      if (fourthNext < limit) {
+        if (
+          isCharSyllable(word[i]) &&
+          word[next] === "n" &&
+          word[secondNext] === "c" &&
+          word[thirdNext] === "e" &&
+          word[fourthNext] === "d"
+        )
+          continue;
+        else if (
+          isCharSyllable(word[i]) &&
+          word[thirdNext] === "e" &&
+          word[fourthNext] === "d"
+        )
+          continue;
+      }
 
       if (thirdNext < limit) {
         if (word[i] === "a" && word[thirdNext] === "e") {
@@ -49,53 +79,75 @@ const countSyllablesInWord = (word) => {
           if (word[next] === "s" && word[secondNext] === "s") {
             if (fourthNext < limit && word[fourthNext] === "s");
             else continue;
+          } else if (word[next] === "b" && word[secondNext] === "b") continue;
+        } else if (word[i] === "u" && word[secondNext] === "e") {
+          if (word[next] === "d" && word[thirdNext] === "d") {
+            syllables++;
+          }
+        } else if (word[i] === "i" && word[secondNext] === "e") {
+          if (word[next] === "d" && word[thirdNext] === "d") {
+            syllables++;
           }
         }
       }
 
       if (secondNext < limit) {
-        if (word[i] === "a" && word[secondNext] === "e") {
-          if (word[next] !== "k") continue;
+        if (
+          isCharSyllable(word[i]) &&
+          isCharSyllable(word[next]) &&
+          isCharSyllable(word[secondNext])
+        )
+          continue;
+        else if (word[i] === "a" && word[secondNext] === "e") {
+          if (thirdNext < limit && word[thirdNext] === "d");
+          else if (word[next] !== "k") continue;
         } else if (word[i] === "e" && word[secondNext] === "e") {
           if (word[next] === "r" || word[next] === "v") continue;
         } else if (word[i] === "o" && word[secondNext] === "e") {
-          if (word[next] !== "k" && word[next] !== "l" && word[next] !== "c")
+          if (word[next] === "d" && word[thirdNext] === "d");
+          else if (
+            word[next] !== "k" &&
+            word[next] !== "l" &&
+            word[next] !== "c"
+          )
             continue;
         } else if (word[i] === "i" && word[secondNext] === "e") {
           if (secondNext === limit - 1) continue;
           else if (word[next] === "v" && word[limit - 1] !== "e");
+          else if (word[next] === "n");
           else continue;
         } else if (word[i] === "u" && word[secondNext] === "e") {
-          continue;
-        } else if (
-          word[i] === "y" &&
-          word[next] === "o" &&
-          word[secondNext] === "u"
-        ) {
           continue;
         }
       }
 
+      // Are there any words that have two syllables in a row?
+      //#region Old Formula
+      // if (next < limit) {
+      //   if (word[i] === word[next]) {
+      //     continue;
+      //   } else if (word[i] === "e" && word[next] === "a") {
+      //     continue;
+      //   } else if (word[i] === "a" && word[next] === "i") {
+      //     continue;
+      //   } else if (word[i] === "i" && word[next] === "e") {
+      //     continue;
+      //   } else if (word[i] === "e" && word[next] === "i") {
+      //     continue;
+      //   } else if (word[i] === "o" && word[next] === "u") {
+      //     continue;
+      //   } else if (word[i] === "o" && word[next] === "y") {
+      //     continue;
+      //   } else if (word[i] === "e" && word[next] === "y") {
+      //     continue;
+      //   } else if (word[i] === "u" && word[next] === "e") {
+      //     continue;
+      //   }
+      // }
+      //#endregion
       if (next < limit) {
-        if (word[i] === word[next]) {
-          continue;
-        } else if (word[i] === "e" && word[next] === "a") {
-          continue;
-        } else if (word[i] === "a" && word[next] === "i") {
-          continue;
-        } else if (word[i] === "i" && word[next] === "e") {
-          continue;
-        } else if (word[i] === "e" && word[next] === "i") {
-          continue;
-        } else if (word[i] === "o" && word[next] === "u") {
-          continue;
-        } else if (word[i] === "o" && word[next] === "y") {
-          continue;
-        } else if (word[i] === "e" && word[next] === "y") {
-          continue;
-        } else if (word[i] === "u" && word[next] === "e") {
-          continue;
-        }
+        if (isCharSyllable(word[i]) && isCharSyllable(word[next])) continue;
+        if (word[i] === "e" && word[next] === "d");
       }
 
       syllables += 1;

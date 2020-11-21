@@ -6,8 +6,9 @@ import "./App.css";
 class App extends Component {
   state = {
     isDefaultTheme: true,
-    showLines: true,
-    showSyllables: true,
+    showLines: false,
+    showSyllables: false,
+    showCopyAlert: false,
   };
 
   setIsDefaultTheme = () => {
@@ -25,6 +26,16 @@ class App extends Component {
     this.setState((prevState) => ({ ...prevState, showSyllables }));
   };
 
+  toggleCopyAlert = () => {
+    const showCopyAlert = !this.state.showCopyAlert;
+    this.setState(
+      (prevState) => ({ ...prevState, showCopyAlert }),
+      () => {
+        if (this.state.showCopyAlert) setTimeout(this.toggleCopyAlert, 1500);
+      }
+    );
+  };
+
   render() {
     return (
       <div className={this.state.isDefaultTheme ? "app-light" : "app-dark"}>
@@ -32,11 +43,15 @@ class App extends Component {
           toggleBackground={this.setIsDefaultTheme}
           toggleSyllables={this.setShowSyllables}
           toggleLines={this.setShowLines}
+          toggleCopyAlert={this.toggleCopyAlert}
+          showSyllables={this.state.showSyllables}
+          showLines={this.state.showLines}
         />
         <Page
           isDefaultTheme={this.state.isDefaultTheme}
           showSyllables={this.state.showSyllables}
           showLines={this.state.showLines}
+          showCopyAlert={this.state.showCopyAlert}
         />
       </div>
     );

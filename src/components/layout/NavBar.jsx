@@ -3,12 +3,14 @@ import "./Navbar.css";
 import {
   BsCircleHalf,
   BsInfoCircleFill,
-  BsThreeDots,
+  BsArrowBarDown,
+  BsArrowBarUp,
   BsArrowsAngleExpand,
   BsArrowsAngleContract,
   BsXCircle,
   BsClipboard,
   BsFillEnvelopeFill,
+  BsGrid3X3Gap,
 } from "react-icons/bs";
 import screenfull from "screenfull";
 
@@ -18,6 +20,10 @@ const NavBar = (props) => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isNavMenuOpen, setIsNavMenuOpen] = useState(false);
 
+  const closeMenu = () => {
+    setIsNavMenuOpen(false);
+  };
+
   const onNavbarClick = (e) => {
     e.preventDefault();
     setIsNavbarCollapsed(!isNavbarCollapsed);
@@ -26,30 +32,41 @@ const NavBar = (props) => {
   const onBackgroundClick = () => {
     setShowDefaultTheme(!showDefaultTheme);
     props.toggleBackground();
+    setIsNavbarCollapsed(!isNavbarCollapsed);
   };
 
   const onExpandClick = () => {
-    setIsFullscreen(true);
-    if (screenfull.isEnabled) {
+    if (screenfull.isEnabled && !screenfull.isFullscreen) {
       screenfull.request();
+      setIsFullscreen(true);
     }
+    setIsNavbarCollapsed(!isNavbarCollapsed);
   };
 
   const onCollapseClick = () => {
-    setIsFullscreen(false);
     if (screenfull.isEnabled && screenfull.isFullscreen) {
       screenfull.exit();
+      setIsFullscreen(false);
     }
+    setIsNavbarCollapsed(!isNavbarCollapsed);
   };
 
   const onClearClick = (e) => {
     e.preventDefault();
     let pageText = document.getElementById("page-text");
-    let linesResult = document.getElementById("lines-result");
-    let syllablesResult = document.getElementById("syllables-result");
     pageText.value = "";
-    linesResult.value = "";
-    syllablesResult.value = "";
+
+    if (props.linesResult) {
+      let linesResult = document.getElementById("lines-result");
+      linesResult.value = "";
+    }
+
+    if (props.syllablesResult) {
+      let syllablesResult = document.getElementById("syllables-result");
+      syllablesResult.value = "";
+    }
+
+    setIsNavbarCollapsed(!isNavbarCollapsed);
   };
 
   const onCopyClick = (e) => {
@@ -60,6 +77,9 @@ const NavBar = (props) => {
     document.execCommand("copy");
     pageText.setSelectionRange(0, 0);
     pageText.blur();
+
+    setIsNavbarCollapsed(!isNavbarCollapsed);
+    props.toggleCopyAlert();
   };
 
   const onNavMenuClick = (e) => {
@@ -69,10 +89,14 @@ const NavBar = (props) => {
 
   const onToggleLinesClick = () => {
     props.toggleLines();
+    closeMenu();
+    setIsNavbarCollapsed(!isNavbarCollapsed);
   };
 
   const onToggleSyllablesClick = () => {
     props.toggleSyllables();
+    closeMenu();
+    setIsNavbarCollapsed(!isNavbarCollapsed);
   };
 
   return (
@@ -83,10 +107,11 @@ const NavBar = (props) => {
           : "navbar navbar-expand-sm navbar-dark nav-dark"
       }
     >
-      <span className="text-muted pr-3">react-pages</span>
       <button
         className={
-          isNavbarCollapsed ? "navbar-toggler collapsed" : "navbar-toggler"
+          isNavbarCollapsed
+            ? "ml-auto navbar-toggler collapsed"
+            : "ml-auto navbar-toggler"
         }
         type="button"
         data-toggle="collapse"
@@ -96,7 +121,7 @@ const NavBar = (props) => {
         aria-label="Toggle navigation"
         onClick={onNavbarClick}
       >
-        <span className="navbar-toggler-icon"></span>
+        <BsGrid3X3Gap />
       </button>
 
       <div
@@ -107,27 +132,27 @@ const NavBar = (props) => {
         }
         id="navbarSupportedContent"
       >
-        <ul className="navbar-nav mr-auto">
+        <ul className="navbar-nav">
           <div className="row justify-content-center text-center">
             {isFullscreen ? (
-              <li className="nav-item col" onClick={onCollapseClick}>
+              <li className="nav-item col-3" onClick={onCollapseClick}>
                 <span className="nav-link" role="button">
                   <BsArrowsAngleContract />
                 </span>
               </li>
             ) : (
-              <li className="nav-item col" onClick={onExpandClick}>
+              <li className="nav-item col-3" onClick={onExpandClick}>
                 <span className="nav-link" role="button">
                   <BsArrowsAngleExpand />
                 </span>
               </li>
             )}
-            <li className="nav-item col">
+            <li className="nav-item col-3">
               <span className="nav-link" role="button" onClick={onClearClick}>
                 <BsXCircle />
               </span>
             </li>
-            <li className="nav-item col">
+            <li className="nav-item col-3">
               <span className="nav-link" role="button" onClick={onCopyClick}>
                 <BsClipboard />
               </span>
@@ -135,19 +160,19 @@ const NavBar = (props) => {
           </div>
         </ul>
 
-        <ul className="navbar-nav">
+        <ul className="navbar-nav ml-auto">
           <div className={"row justify-content-center text-center"}>
-            <li className="nav-item col" onClick={onBackgroundClick}>
+            <li className="nav-item col-3" onClick={onBackgroundClick}>
               <span className="nav-link" role="button">
                 <BsCircleHalf />
               </span>
             </li>
-            <li className="nav-item col">
+            <li className="nav-item col-3">
               <span className="nav-link" role="button">
                 <BsFillEnvelopeFill />
               </span>
             </li>
-            <li className="nav-item col">
+            <li className="nav-item col-3">
               <span className="nav-link" role="button">
                 <BsInfoCircleFill />
               </span>
@@ -155,36 +180,41 @@ const NavBar = (props) => {
             <li
               className={
                 isNavMenuOpen
-                  ? "nav-item col dropdown show"
-                  : "nav-item col dropdown"
+                  ? "nav-item col-sm-3 dropdown show"
+                  : "nav-item col-sm-3 dropdown"
               }
             >
               <span
                 id="navbarDropdown"
-                className="nav-link dropdown-toggle"
+                className="nav-link "
                 role="button"
                 aria-haspopup="true"
                 aria-expanded={isNavMenuOpen ? "true" : "false"}
+                aria-label="Toggle dropdown menu"
                 onClick={onNavMenuClick}
               >
-                <BsThreeDots />
+                {isNavMenuOpen ? <BsArrowBarUp /> : <BsArrowBarDown />}
               </span>
               <div
                 className={
                   isNavMenuOpen
-                    ? "dropdown-menu dropdown-menu-right show"
-                    : "dropdown-menu dropdown-menu-right"
+                    ? "py-0 dropdown-menu dropdown-menu-right show"
+                    : "py-0 dropdown-menu dropdown-menu-right"
                 }
                 aria-labelledby="navbarDropdown"
               >
                 <button className="dropdown-item" onClick={onToggleLinesClick}>
-                  Toggle Lines
+                  <p className="my-0">{`Line Counter: ${
+                    props.showLines ? "On" : "Off"
+                  }`}</p>
                 </button>
                 <button
                   className="dropdown-item"
                   onClick={onToggleSyllablesClick}
                 >
-                  Toggle Syllables
+                  <p className="my-0">{`Syllable Counter: ${
+                    props.showSyllables ? "On" : "Off"
+                  }`}</p>
                 </button>
               </div>
             </li>

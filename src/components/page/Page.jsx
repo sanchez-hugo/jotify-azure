@@ -112,7 +112,9 @@ class Page extends Component {
     let lineResults = "";
 
     for (const line in lines) {
-      syllableResults += `${lines[line].syllables}\n`;
+      syllableResults += lines[line].syllables
+        ? `${lines[line].syllables}\n`
+        : `\n`;
       lineResults += `${lines[line].id}\n`;
     }
 
@@ -177,7 +179,22 @@ class Page extends Component {
 
     return (
       <>
+        {this.props.showCopyAlert ? (
+          <div className="row justify-content-center">
+            <div
+              className="col-md-6 alert alert-success text-center"
+              role="alert"
+            >
+              Copied!
+            </div>
+          </div>
+        ) : null}
         <div className="row justify-content-center">
+          {this.props.showSyllables ? (
+            <div className="col-2 px-0">
+              <p className="page-text-muted text-right">Syllables</p>
+            </div>
+          ) : null}
           {this.props.showLines ? (
             <div className="col-2 px-0">
               <p className="page-text-muted text-right">Line</p>
@@ -186,13 +203,18 @@ class Page extends Component {
           <div className="col px-md-3">
             <p className="page-text-muted">Text</p>
           </div>
-          {this.props.showSyllables ? (
-            <div className="col-2 px-0">
-              <p className="page-text-muted">Syllables</p>
-            </div>
-          ) : null}
         </div>
         <div className="row justify-content-center">
+          {this.props.showSyllables ? (
+            <div className="col-2 px-0">
+              <textarea
+                id="syllables-result"
+                className={pageResultsClassName + " text-right"}
+                value={this.state.results.syllableResults}
+                readOnly
+              />
+            </div>
+          ) : null}
           {this.props.showLines ? (
             <div className="col-2 px-0">
               <textarea
@@ -212,16 +234,6 @@ class Page extends Component {
               onScroll={this.onTextScroll}
             />
           </div>
-          {this.props.showSyllables ? (
-            <div className="col-2 px-0">
-              <textarea
-                id="syllables-result"
-                className={pageResultsClassName}
-                value={this.state.results.syllableResults}
-                readOnly
-              />
-            </div>
-          ) : null}
         </div>
         <div className="row justify-content-center py-0">
           <input
