@@ -58,6 +58,7 @@ class App extends Component {
           showSyllables={this.state.showSyllables}
           showLines={this.state.showLines}
           toggleTextCleared={this.toggleTextCleared}
+          isDefaultTheme={this.state.isDefaultTheme}
         />
         <Page
           isDefaultTheme={this.state.isDefaultTheme}

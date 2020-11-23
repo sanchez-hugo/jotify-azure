@@ -2,17 +2,17 @@ import React, { useState } from "react";
 import "./Navbar.css";
 import {
   BsCircleHalf,
-  BsInfoCircleFill,
   BsFillCaretDownFill,
   BsFillCaretUpFill,
   BsArrowsAngleExpand,
   BsArrowsAngleContract,
-  BsTrash,
+  BsBackspace,
   BsClipboard,
-  BsFillEnvelopeFill,
+  // BsFillEnvelopeFill,
   BsGrid3X3Gap,
 } from "react-icons/bs";
 import screenfull from "screenfull";
+import InfoModal from "../modals/InfoModal";
 
 const NavBar = (props) => {
   const [isNavbarCollapsed, setIsNavbarCollapsed] = useState(true);
@@ -55,6 +55,8 @@ const NavBar = (props) => {
     e.preventDefault();
     props.toggleTextCleared();
     setIsNavbarCollapsed(!isNavbarCollapsed);
+    const pageText = document.getElementById("page-text");
+    pageText.focus();
   };
 
   const onCopyClick = (e) => {
@@ -137,7 +139,7 @@ const NavBar = (props) => {
             )}
             <li className="nav-item col-3">
               <span className="nav-link" role="button" onClick={onClearClick}>
-                <BsTrash />
+                <BsBackspace />
               </span>
             </li>
             <li className="nav-item col-3">
@@ -155,15 +157,13 @@ const NavBar = (props) => {
                 <BsCircleHalf />
               </span>
             </li>
-            <li className="nav-item col-3">
+            {/* <li className="nav-item col-3">
               <span className="nav-link" role="button">
                 <BsFillEnvelopeFill />
               </span>
-            </li>
+            </li> */}
             <li className="nav-item col-3">
-              <span className="nav-link" role="button">
-                <BsInfoCircleFill />
-              </span>
+              <InfoModal isDefaultTheme={props.isDefaultTheme} />
             </li>
             <li
               className={

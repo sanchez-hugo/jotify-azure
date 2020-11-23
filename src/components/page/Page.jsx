@@ -18,8 +18,7 @@ class Page extends Component {
   };
 
   componentDidUpdate(prevProps) {
-    if (prevProps.wasTextCleared !== this.props.wasTextCleared) {
-      console.log("resetting");
+    if (prevProps.wasTextCleared !== this.props.wasTextCleared && this.state.text) {
       this.resetState();
     }
   }
