@@ -49,7 +49,13 @@ class App extends Component {
 
   render() {
     return (
-      <div className={this.state.isDefaultTheme ? "app-light" : "app-dark"}>
+      <div
+        className={
+          this.state.isDefaultTheme
+            ? "container-fluid app-light"
+            : "container-fluid app-dark"
+        }
+      >
         <NavBar
           toggleBackground={this.setIsDefaultTheme}
           toggleSyllables={this.setShowSyllables}
