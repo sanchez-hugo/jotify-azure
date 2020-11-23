@@ -3,11 +3,11 @@ import "./Navbar.css";
 import {
   BsCircleHalf,
   BsInfoCircleFill,
-  BsArrowBarDown,
-  BsArrowBarUp,
+  BsFillCaretDownFill,
+  BsFillCaretUpFill,
   BsArrowsAngleExpand,
   BsArrowsAngleContract,
-  BsXCircle,
+  BsTrash,
   BsClipboard,
   BsFillEnvelopeFill,
   BsGrid3X3Gap,
@@ -53,19 +53,7 @@ const NavBar = (props) => {
 
   const onClearClick = (e) => {
     e.preventDefault();
-    let pageText = document.getElementById("page-text");
-    pageText.value = "";
-
-    if (props.linesResult) {
-      let linesResult = document.getElementById("lines-result");
-      linesResult.value = "";
-    }
-
-    if (props.syllablesResult) {
-      let syllablesResult = document.getElementById("syllables-result");
-      syllablesResult.value = "";
-    }
-
+    props.toggleTextCleared();
     setIsNavbarCollapsed(!isNavbarCollapsed);
   };
 
@@ -149,7 +137,7 @@ const NavBar = (props) => {
             )}
             <li className="nav-item col-3">
               <span className="nav-link" role="button" onClick={onClearClick}>
-                <BsXCircle />
+                <BsTrash />
               </span>
             </li>
             <li className="nav-item col-3">
@@ -193,7 +181,11 @@ const NavBar = (props) => {
                 aria-label="Toggle dropdown menu"
                 onClick={onNavMenuClick}
               >
-                {isNavMenuOpen ? <BsArrowBarUp /> : <BsArrowBarDown />}
+                {isNavMenuOpen ? (
+                  <BsFillCaretUpFill />
+                ) : (
+                  <BsFillCaretDownFill />
+                )}
               </span>
               <div
                 className={

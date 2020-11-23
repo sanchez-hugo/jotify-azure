@@ -17,30 +17,37 @@ class Page extends Component {
     },
   };
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.wasTextCleared !== this.props.wasTextCleared) {
+      console.log("resetting");
+      this.resetState();
+    }
+  }
+
   onTextChange = (e) => {
     const event = e;
     const { value } = event.target;
 
     if (value === "") this.resetState();
     else {
-      this.setText(value);
-      this.findCounts();
+      this.findCounts(value);
     }
   };
 
-  onTextKeyPress = () => {
-    this.findCounts();
+  onTextKeyDown = (e) => {
+    const event = e;
+    const code = event.keyCode || event.charCode;
+
+    if (code === 8 || code === 46) {
+      const text = event.target.value;
+      this.findCounts(text);
+    }
   };
 
   onTextScroll = (e) => {
     const target = e.target;
     const { scrollTop } = target;
-    /**
-     * scrollTop: 905
-     * scrollLeft: 0
-     * scrollTop: 170
-     * scrollWidth: 869
-     */
+
     if (this.props.showLines) {
       let linesResult = document.getElementById("lines-result");
       linesResult.scrollTop = scrollTop;
@@ -52,8 +59,10 @@ class Page extends Component {
     }
   };
 
-  findCounts = () => {
-    const { text } = this.state;
+  findCounts = (text) => {
+    // const { text } = this.state;
+    if (!text) return;
+
     const textArr = text.split(`\n`); // array of lines
 
     let lineCount = 0;
@@ -96,7 +105,7 @@ class Page extends Component {
     };
 
     const results = this.findResults(lines);
-    this.setCounts(counts, lines, results);
+    this.setCounts(text, counts, lines, results);
   };
 
   findResults = (lines) => {
@@ -112,10 +121,11 @@ class Page extends Component {
     let lineResults = "";
 
     for (const line in lines) {
-      syllableResults += lines[line].syllables
-        ? `${lines[line].syllables}\n`
-        : `\n`;
-      lineResults += `${lines[line].id}\n`;
+      if (!lines[line].words) syllableResults += `\n`;
+      else syllableResults += `${lines[line].syllables}\n`;
+
+      if ([line] < 9) lineResults += `0${lines[line].id}\n`;
+      else lineResults += `${lines[line].id}\n`;
     }
 
     const results = { syllableResults, lineResults };
@@ -127,9 +137,10 @@ class Page extends Component {
     this.setState((prevState) => ({ ...prevState, text }));
   };
 
-  setCounts = (counts, lines, results) => {
+  setCounts = (text, counts, lines, results) => {
     this.setState((prevState) => ({
       ...prevState,
+      text,
       counts,
       lines,
       results,
@@ -192,17 +203,18 @@ class Page extends Component {
         <div className="row justify-content-center">
           {this.props.showSyllables ? (
             <div className="col-2 px-0">
-              <p className="page-text-muted text-right">Syllables</p>
+              <p className="page-text-muted text-right">Syll.</p>
             </div>
           ) : null}
-          {this.props.showLines ? (
-            <div className="col-2 px-0">
-              <p className="page-text-muted text-right">Line</p>
-            </div>
-          ) : null}
+
           <div className="col px-md-3">
             <p className="page-text-muted">Text</p>
           </div>
+          {this.props.showLines ? (
+            <div className="col-2 px-0">
+              <p className="page-text-muted text-left">Line</p>
+            </div>
+          ) : null}
         </div>
         <div className="row justify-content-center">
           {this.props.showSyllables ? (
@@ -210,21 +222,16 @@ class Page extends Component {
               <textarea
                 id="syllables-result"
                 className={pageResultsClassName + " text-right"}
-                value={this.state.results.syllableResults}
+                value={
+                  this.state.results.syllableResults
+                    ? this.state.results.syllableResults
+                    : ""
+                }
                 readOnly
               />
             </div>
           ) : null}
-          {this.props.showLines ? (
-            <div className="col-2 px-0">
-              <textarea
-                id="lines-result"
-                className={pageResultsClassName + " text-right"}
-                value={this.state.results.lineResults}
-                readOnly
-              />
-            </div>
-          ) : null}
+
           <div className={"col px-md-3 " + pageClassName}>
             <textarea
               autoFocus
@@ -232,8 +239,24 @@ class Page extends Component {
               className={pageTextClassName}
               onChange={this.onTextChange}
               onScroll={this.onTextScroll}
+              onKeyDown={this.onTextKeyDown}
+              value={this.state.text ? this.state.text : ""}
             />
           </div>
+          {this.props.showLines ? (
+            <div className="col-2 px-0">
+              <textarea
+                id="lines-result"
+                className={pageResultsClassName + " text-left"}
+                value={
+                  this.state.results.lineResults
+                    ? this.state.results.lineResults
+                    : ""
+                }
+                readOnly
+              />
+            </div>
+          ) : null}
         </div>
         <div className="row justify-content-center py-0">
           <input

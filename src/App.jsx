@@ -9,6 +9,7 @@ class App extends Component {
     showLines: false,
     showSyllables: false,
     showCopyAlert: false,
+    wasTextCleared: false,
   };
 
   setIsDefaultTheme = () => {
@@ -36,6 +37,16 @@ class App extends Component {
     );
   };
 
+  toggleTextCleared = () => {
+    const wasTextCleared = !this.state.wasTextCleared;
+    this.setState(
+      (prevState) => ({ ...prevState, wasTextCleared }),
+      () => {
+        if (this.state.wasTextCleared) this.toggleTextCleared();
+      }
+    );
+  };
+
   render() {
     return (
       <div className={this.state.isDefaultTheme ? "app-light" : "app-dark"}>
@@ -46,12 +57,15 @@ class App extends Component {
           toggleCopyAlert={this.toggleCopyAlert}
           showSyllables={this.state.showSyllables}
           showLines={this.state.showLines}
+          toggleTextCleared={this.toggleTextCleared}
         />
         <Page
           isDefaultTheme={this.state.isDefaultTheme}
           showSyllables={this.state.showSyllables}
           showLines={this.state.showLines}
           showCopyAlert={this.state.showCopyAlert}
+          wasTextCleared={this.state.wasTextCleared}
+          toggleTextCleared={this.toggleTextCleared}
         />
       </div>
     );
