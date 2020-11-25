@@ -1,15 +1,15 @@
 .app-light {
   background-color: #f8f9fa;
   height: 100vh;
-  padding: 1em;
+  padding: 2em;
   color: rgb(63, 63, 63);
 }
 
 .app-dark {
   background-color: #212529;
   height: 100vh;
-  padding: 1em;
-  color: white;
+  padding: 2em;
+  color: #f8f9fa;
 }
 
 /* .App {
