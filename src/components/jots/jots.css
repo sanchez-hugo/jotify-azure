@@ -1,15 +1,31 @@
+.jots-page {
+  height: 80%;
+
+}
+
+.jot-title {
+  height: 2em;
+}
+
+.jot-content {
+  height: 100%;
+}
+
 .page-light {
   background-color: #f8f9fa !important;
   color: #212529;
+  height: 100%;
 }
 
 .page-dark {
   background-color: #212529 !important;
   color: #f8f9fa;
+  height: 100%;
 }
 
-.page-text-muted {
+.jot-title-text {
   appearance: none;
+  height: 100%;
   background: transparent;
   border: none;
   outline: none;
@@ -28,6 +44,7 @@
 
 .page-text-light {
   appearance: none;
+  height: 100%;
   background: transparent;
   border: none;
   outline: none;
@@ -36,7 +53,6 @@
   /* user-select: auto; */
   color: #212529;
   width: 100%;
-  min-height: 65vh;
   font-family: monospace;
   font-size: 1.2em;
   letter-spacing: 0.1em;
@@ -46,6 +62,7 @@
 
 .page-text-dark {
   appearance: none;
+  height: 100%;
   background: transparent;
   border: none;
   outline: none;
@@ -54,7 +71,6 @@
   /* user-select: auto; */
   color: #f8f9fa;
   width: 100%;
-  min-height: 65vh;
   font-family: monospace;
   font-size: 1.2em;
   letter-spacing: 0.1em;
@@ -83,34 +99,9 @@ textarea.page-text-dark::-webkit-scrollbar-thumb {
   border-radius: 5px;
 }
 
-.page-msg-light {
-  appearance: none;
-  background: transparent;
-  outline: none;
-  border: none;
-  color: #212529;
-  font-family: monospace;
-  font-size: 1.1em;
-  letter-spacing: 0.1em;
-  text-align: center;
-  padding-top: 1em;
-}
-
-.page-msg-dark {
-  appearance: none;
-  background: transparent;
-  outline: none;
-  border: none;
-  color: #f8f9fa;
-  font-family: monospace;
-  font-size: 1.1em;
-  letter-spacing: 0.1em;
-  text-align: center;
-  padding-top: 1em;
-}
-
 .page-results-light {
   appearance: none;
+  height: 100%;
   background: transparent;
   border: none;
   outline: none;
@@ -118,7 +109,6 @@ textarea.page-text-dark::-webkit-scrollbar-thumb {
   caret-color: #212529;
   color: #212529;
   width: 100%;
-  min-height: 65vh;
   font-family: monospace;
   font-size: 1.2em;
   letter-spacing: 0.1em;
@@ -128,6 +118,7 @@ textarea.page-text-dark::-webkit-scrollbar-thumb {
 
 .page-results-dark {
   appearance: none;
+  height: 100%;
   background: transparent;
   border: none;
   outline: none;
@@ -135,7 +126,6 @@ textarea.page-text-dark::-webkit-scrollbar-thumb {
   caret-color: #f8f9fa;
   color: #f8f9fa;
   width: 100%;
-  min-height: 65vh;
   font-family: monospace;
   font-size: 1.2em;
   letter-spacing: 0.1em;

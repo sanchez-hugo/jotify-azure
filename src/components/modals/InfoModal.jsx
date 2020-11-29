@@ -15,15 +15,14 @@ const InfoModal = (props) => {
 
   return (
     <>
-      <span
-        role="button"
-        className="nav-link"
+      <button
+        className="btn nav-link"
         data-toggle="modal"
         data-target="#infoModal"
         onClick={onButtonClick}
       >
         <BsInfoCircleFill />
-      </span>
+      </button>
 
       <div
         className={isModalActive ? "modal fade show blur" : "modal fade"}
@@ -45,7 +44,7 @@ const InfoModal = (props) => {
           >
             <div className="modal-header">
               <h5 className="modal-title" id="infoModal-title">
-                Blank Sheet
+                Jotify
               </h5>
               <button
                 type="button"
@@ -95,9 +94,8 @@ const InfoModal = (props) => {
                 }
               >
                 I would love to hear some feedback after I've reached a good
-                point in development. Please stay tuned. In the mean time, keep{" "}
-                <span style={{ textDecoration: "line-through" }}>writing</span>{" "}
-                typing!
+                point in development. Please stay tuned. In the mean time, keep
+                jotting!
               </small>
             </div>
           </div>
