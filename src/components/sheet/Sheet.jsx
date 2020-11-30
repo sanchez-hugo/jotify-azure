@@ -297,7 +297,7 @@ class Sheet extends Component {
         {this.state.options.words ? (
           <Footer
             isDefaultTheme={this.state.isDefaultTheme}
-            jot={this.state.jot}
+            counts={this.state.jot.counts}
             options={this.state.options}
           />
         ) : null}

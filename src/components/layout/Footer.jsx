@@ -2,14 +2,12 @@ import React from "react";
 import "./footer.css";
 
 const Footer = (props) => {
-  const pageInputClassName = props.isDefaultTheme ? "msg-light" : "msg-dark";
-
   return (
     <footer className="fixed">
       <input
-        className={pageInputClassName}
+        className={props.isDefaultTheme ? "msg-light" : "msg-dark"}
         type="text"
-        value={`${props.jot.counts.wordCount} words`}
+        value={`${props.counts.wordCount} words`}
         readOnly
       />
     </footer>

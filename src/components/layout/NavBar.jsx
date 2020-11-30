@@ -118,19 +118,18 @@ const NavBar = (props) => {
         <ul className="navbar-nav">
           <div className="row justify-content-center text-center">
             {screenfull.isEnabled ? (
-              isFullscreen ? (
-                <li className="nav-item col-sm-3" onClick={onCollapseClick}>
-                  <button className="btn nav-link">
+              <li className="nav-item col-sm-3">
+                <button
+                  className="btn nav-link"
+                  onClick={isFullscreen ? onCollapseClick : onExpandClick}
+                >
+                  {isFullscreen ? (
                     <BsArrowsAngleContract />
-                  </button>
-                </li>
-              ) : (
-                <li className="nav-item col-sm-3" onClick={onExpandClick}>
-                  <button className="btn nav-link">
+                  ) : (
                     <BsArrowsAngleExpand />
-                  </button>
-                </li>
-              )
+                  )}
+                </button>
+              </li>
             ) : null}
 
             <li className="nav-item col-sm-3">
