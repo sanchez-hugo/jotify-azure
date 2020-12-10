@@ -1,12 +1,12 @@
 .app-light {
     background-color: #f8f9fa;
-    height: 100vh;
+    min-height: 100vh;
     color: rgb(63, 63, 63);
   }
   
   .app-dark {
     background-color: #212529;
-    height: 100vh;
+    min-height: 100vh;
     color: #f8f9fa;
   }
   

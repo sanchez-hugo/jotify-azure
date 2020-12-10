@@ -1,103 +1,95 @@
-import React, { Component } from "react";
-import "./jots.css";
+import React from "react";
 
-class Jots extends Component {
-  onPageClick = () => {
-    if (this.props.nav.isNavBarOpen || this.props.nav.isDropDownOpen)
-      this.props.closeMenu();
+const Jots = (props) => {
+  const { isDefaultTheme, options, jot, nav } = props;
+
+  const onPageClick = () => {
+    if (nav.isNavBarOpen || nav.isDropDownOpen) props.closeMenu();
   };
 
-  render() {
-    const { isDefaultTheme } = this.props;
+  const onJotTextChange = (e) => {
+    props.onTextChange(e, jot.id);
+  };
 
-    const pageTextClassName = isDefaultTheme
-      ? "page-text-light"
-      : "page-text-dark";
+  const onJotScroll = (e) => {
+    props.onTextScroll(e);
+  };
 
-    const pageResultsClassName = isDefaultTheme
-      ? "page-results-light"
-      : "page-results-dark";
+  const onJotTextKeyDown = (e) => {
+    props.onTextKeyDown(e, jot.id);
+  };
 
-    return (
-      <div className="jots-page" onClick={this.onPageClick}>
-        {this.props.options.copied ? (
-          <div className="row justify-content-center">
-            <div
-              className="col-md-6 alert alert-success text-center"
-              role="alert"
-            >
-              {this.props.jot.text ? "Copied!" : "Nothing to copy!"}
-            </div>
+  const pageTextClassName = isDefaultTheme
+    ? "page-text-light"
+    : "page-text-dark";
+
+  const pageResultsClassName = isDefaultTheme
+    ? "page-results-light"
+    : "page-results-dark";
+
+  return (
+    <div className="jots-page" onClick={onPageClick}>
+      <div className="row justify-content-center jot-title">
+        {options.syllables ? (
+          <div className="col-2 px-0">
+            <p className="jot-title-text text-right">Syll.</p>
           </div>
         ) : null}
 
-        <div className="row justify-content-center jot-title">
-          {this.props.options.syllables ? (
-            <div className="col-2 px-0">
-              <p className="jot-title-text text-right">Syll.</p>
-            </div>
-          ) : null}
-
-          <div className="col px-3">
-            <p className="jot-title-text">Jots</p>
-          </div>
-          {this.props.options.lines ? (
-            <div className="col-2 px-0">
-              <p className="jot-title-text text-left">Line</p>
-            </div>
-          ) : null}
+        <div className="col px-3">
+          <p className="jot-title-text">Jots</p>
         </div>
+        {options.lines ? (
+          <div className="col-2 px-0">
+            <p className="jot-title-text text-left">Line</p>
+          </div>
+        ) : null}
+      </div>
 
-        <div className="row justify-content-center jot-content">
-          {this.props.options.syllables ? (
-            <div className="col-2 px-0">
-              <textarea
-                id="syllables-result"
-                className={pageResultsClassName + " text-right"}
-                value={
-                  this.props.jot.results.syllableResults
-                    ? this.props.jot.results.syllableResults
-                    : ""
-                }
-                readOnly
-              />
-            </div>
-          ) : null}
-
-          <div
-            className={
-              isDefaultTheme ? "page-light col px-3" : "page-dark col px-3"
-            }
-          >
+      <div className="row justify-content-center jot-content">
+        {options.syllables ? (
+          <div className="col-2 px-0">
             <textarea
-              autoFocus
-              id="page-text"
-              className={pageTextClassName}
-              onChange={this.props.onTextChange}
-              onScroll={this.props.onTextScroll}
-              onKeyDown={this.props.onTextKeyDown}
-              value={this.props.jot.text ? this.props.jot.text : ""}
+              id={`syllables-result-${jot.id}`}
+              className={pageResultsClassName + " text-right"}
+              value={
+                jot.results.syllableResults ? jot.results.syllableResults : ""
+              }
+              readOnly
             />
           </div>
+        ) : null}
 
-          {this.props.options.lines ? (
-            <div className="col-2 px-0">
-              <textarea
-                id="lines-result"
-                className={pageResultsClassName + " text-left"}
-                value={
-                  this.props.jot.results.lineResults
-                    ? this.props.jot.results.lineResults
-                    : ""
-                }
-                readOnly
-              />
-            </div>
-          ) : null}
+        <div
+          className={
+            isDefaultTheme ? "page-light col px-3" : "page-dark col px-3"
+          }
+        >
+          <textarea
+            autoFocus
+            id={`page-text-${jot.id}`}
+            placeholder="Jot away..."
+            className={pageTextClassName}
+            onChange={onJotTextChange}
+            onScroll={onJotScroll}
+            onKeyDown={onJotTextKeyDown}
+            value={jot.text ? jot.text : ""}
+          />
         </div>
+
+        {options.lines ? (
+          <div className="col-2 px-0">
+            <textarea
+              id={`lines-result-${jot.id}`}
+              className={pageResultsClassName + " text-left"}
+              value={jot.results.lineResults ? jot.results.lineResults : ""}
+              readOnly
+            />
+          </div>
+        ) : null}
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 export default Jots;

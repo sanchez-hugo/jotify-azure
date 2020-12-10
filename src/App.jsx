@@ -4,7 +4,13 @@ import Sheet from "./components/sheet/Sheet";
 
 class App extends Component {
   render() {
-    return <Sheet />;
+    return (
+      <div className="container-fluid">
+        <div className="row">
+          <Sheet />
+        </div>
+      </div>
+    );
   }
 }
 

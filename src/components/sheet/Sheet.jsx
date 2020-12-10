@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import NavBar from "../layout/NavBar";
+import Alert from "../layout/Alert";
 import Jots from "../jots/Jots";
 import "./sheet.css";
 import { countSyllablesInWord } from "../../services/pageService";
 import Footer from "../layout/Footer";
+import Pagination from "../layout/Pagination";
 // import PropTypes from "prop-types";
 
 class Sheet extends Component {
@@ -18,8 +20,62 @@ class Sheet extends Component {
       syllables: false,
       words: false,
       copied: false,
+      cleared: false,
     },
-    jot: {
+    jots: [],
+    mappedJots: [],
+    pagination: {
+      currentJot: 0,
+      totalJots: 0,
+    },
+    // jot: {
+    //   text: "",
+    //   lines: [],
+    //   counts: {
+    //     wordCount: 0,
+    //     lineCount: 0,
+    //     syllableCount: 0,
+    //   },
+    //   results: {
+    //     syllableResults: "",
+    //     lineResults: "",
+    //   },
+    // },
+  };
+
+  componentDidMount() {
+    // Create the first jot
+    const id = this.getNewJotId();
+    const jot = this.getEmptyJot(id);
+
+    // Push to state
+    const jots = [jot];
+    const mappedJots = jots.map(this.mapJot);
+    this.setJotsAndMappedJots(jots, mappedJots);
+  }
+
+  //#region Jot Management
+  mapJot = (jot) => {
+    return (
+      <Jots
+        key={jot.id}
+        isDefaultTheme={this.state.isDefaultTheme}
+        jot={jot}
+        nav={this.state.nav}
+        options={this.state.options}
+        onTextChange={this.onTextChange}
+        onTextKeyDown={this.onTextKeyDown}
+        onTextScroll={this.onTextScroll}
+        closeMenu={this.resetNav}
+      />
+    );
+  };
+
+  getEmptyJot = (id) => {
+    if (!id) id = this.getNewJotId();
+
+    const jot = {
+      id,
       text: "",
       lines: [],
       counts: {
@@ -31,8 +87,75 @@ class Sheet extends Component {
         syllableResults: "",
         lineResults: "",
       },
-    },
+    };
+
+    return jot;
   };
+
+  getNewJotId = () => {
+    const id = this.state.pagination.totalJots + 1;
+    this.setTotalJots(id);
+    return id;
+  };
+
+  getCurrentJotId = (jots) => {
+    if (!jots) jots = this.state.jots;
+    const id = jots[this.state.pagination.currentJot].id;
+    return id;
+  };
+
+  findJotIndexFromId = (id, jots) => {
+    if (!jots) jots = this.state.jots;
+    const isIdOf = (jot) => jot.id === id;
+    const jotIndex = jots.findIndex(isIdOf);
+    return jotIndex;
+  };
+
+  findIdFromJotIndex = (index, jots) => {
+    if (!jots) jots = this.state.jots;
+    const id = jots[index].id;
+    return id;
+  };
+
+  addJot = () => {
+    const id = this.getNewJotId();
+
+    const jot = this.getEmptyJot(id);
+    const mappedJot = this.mapJot(jot);
+
+    const { jots, mappedJots } = this.state;
+
+    jots.push(jot);
+    mappedJots.push(mappedJot);
+
+    this.setJotsAndMappedJots(jots, mappedJots);
+  };
+
+  nextJot = () => {
+    const nextJot = this.state.pagination.currentJot + 1;
+    if (this.state.jots[nextJot]) this.setCurrentJot(nextJot);
+  };
+
+  prevJot = () => {
+    const prevJot = this.state.pagination.currentJot - 1;
+    if (this.state.jots[prevJot]) this.setCurrentJot(prevJot);
+  };
+
+  setTotalJots = (totalJots) => {
+    this.setState((prevState) => ({
+      ...prevState,
+      pagination: { ...prevState.pagination, totalJots },
+    }));
+  };
+
+  setCurrentJot = (currentJot) => {
+    this.setState((prevState) => ({
+      ...prevState,
+      pagination: { ...prevState.pagination, currentJot },
+    }));
+  };
+
+  //#endregion
 
   //#region Toggles
 
@@ -79,6 +202,20 @@ class Sheet extends Component {
     );
   };
 
+  toggleClearedOption = () => {
+    const cleared = !this.state.options.cleared;
+    this.setState(
+      (prevState) => ({
+        ...prevState,
+        options: { ...prevState.options, cleared },
+      }),
+      () => {
+        if (this.state.options.cleared)
+          setTimeout(this.toggleClearedOption, 2000);
+      }
+    );
+  };
+
   toggleNavBar = () => {
     const isNavBarOpen = !this.state.nav.isNavBarOpen;
     this.setState((prevState) => ({
@@ -95,6 +232,17 @@ class Sheet extends Component {
     }));
   };
 
+  toggles = {
+    toggleBackground: this.setIsDefaultTheme,
+    toggleSyllables: this.toggleSyllablesOption,
+    toggleLines: this.toggleLinesOption,
+    toggleWords: this.toggleWordsOption,
+    toggleCopied: this.toggleCopiedOption,
+    toggleCleared: this.toggleClearedOption,
+    toggleNavBar: this.toggleNavBar,
+    toggleDropDown: this.toggleDropDown,
+  };
+
   resetNav = () => {
     const nav = { isNavBarOpen: false, isDropDownOpen: false };
     this.setState((prevState) => ({
@@ -105,57 +253,67 @@ class Sheet extends Component {
 
   //#endregion
 
-  //#region Jots Stuff
-  onTextChange = (e) => {
+  //#region Jot Editing
+  /**
+   * Each jots, should be able to edit:
+   *  1. text
+   *  2. lines
+   *  3. counts
+   *  4. results
+   */
+
+  onTextChange = (e, id) => {
     const event = e;
     const { value } = event.target;
 
-    if (value === "") this.resetState();
-    else {
-      this.findCounts(value);
-    }
+    if (value) this.findCounts(value, id);
+    else if (value === "") this.resetJot(id);
   };
 
-  onTextKeyDown = (e) => {
+  onTextKeyDown = (e, id) => {
     const event = e;
     const code = event.keyCode || event.charCode;
 
     if (code === 8 || code === 46) {
-      const text = event.target.value;
-      this.findCounts(text);
+      const { value } = event.target;
+      this.findCounts(value, id);
     }
   };
 
-  onTextScroll = (e) => {
-    const target = e.target;
-    const { scrollTop } = target;
-
-    if (this.state.options.lines) {
-      let linesResult = document.getElementById("lines-result");
-      linesResult.scrollTop = scrollTop;
-    }
-
-    if (this.state.options.syllables) {
-      let syllablesResult = document.getElementById("syllables-result");
-      syllablesResult.scrollTop = scrollTop;
-    }
-  };
-
-  onTextClear = () => {
-    this.resetState();
-    const pageText = document.getElementById("page-text");
-    pageText.focus();
-  };
-
-  findCounts = (text) => {
-    // const { text } = this.state;
+  findCounts = (text, jotId) => {
     if (!text) return;
 
+    // get new jot info
+    const loadedJot = this.getLoadedJot(text, jotId);
+
+    // replace respective jot
+    const { jots, mappedJots } = this.state;
+    jots[jotId - 1] = loadedJot;
+    mappedJots[jotId - 1] = this.mapJot(loadedJot);
+
+    // save new jot info
+    this.setJotsAndMappedJots(jots, mappedJots);
+  };
+
+  getLoadedJot = (text, id) => {
+    const linesAndCounts = this.getLinesAndCounts(text);
+
+    const { lines, counts } = linesAndCounts;
+
+    const results = this.getResults(lines);
+
+    const jot = { id, text, counts, lines, results };
+
+    return jot;
+  };
+
+  getLinesAndCounts = (text) => {
     const textArr = text.split(`\n`); // array of lines
 
     let lineCount = 0;
     let wordCount = 0;
     let syllableCount = 0;
+
     let lines = [];
 
     for (let i = 0; i < textArr.length; i++) {
@@ -192,13 +350,10 @@ class Sheet extends Component {
       syllableCount,
     };
 
-    const results = this.findResults(lines);
-
-    const jot = { text, counts, lines, results };
-    this.setJot(jot);
+    return { lines, counts };
   };
 
-  findResults = (lines) => {
+  getResults = (lines) => {
     /**
      * lines: {
      *    id: number,
@@ -223,44 +378,74 @@ class Sheet extends Component {
     return results;
   };
 
-  setText = (text) => {
-    this.setState((prevState) => ({ ...prevState, text }));
+  setJotsAndMappedJots = (jots, mappedJots) => {
+    this.setState((prevState) => ({ ...prevState, jots, mappedJots }));
   };
 
-  setJot = (jot) => {
-    this.setState((prevState) => ({
-      ...prevState,
-      jot,
-    }));
-  };
+  resetJot = (id) => {
+    const emptiedJot = this.getEmptyJot(id);
+    const { jots, mappedJots } = this.state;
 
-  resetState = () => {
-    const text = "";
-    const lines = [];
-    const counts = {
-      wordCount: 0,
-      lineCount: 0,
-      syllableCount: 0,
-    };
-    const results = {
-      syllablesResult: "",
-      linesResult: "",
-    };
+    const jotIndex = this.findJotIndexFromId(id, jots);
 
-    const jot = { text, counts, lines, results };
+    jots[jotIndex] = emptiedJot;
+    mappedJots[jotIndex] = this.mapJot(emptiedJot);
 
-    this.setState((prevState) => ({
-      ...prevState,
-      jot,
-    }));
+    this.setJotsAndMappedJots(jots, mappedJots);
   };
 
   //#endregion
 
-  //#region
+  //#region Non-Editing Event Handlers
+  onTextScroll = (e) => {
+    const target = e.target;
+    const { scrollTop } = target;
+    if (this.state.options.lines || this.state.options.syllables) {
+      const jotId = this.getCurrentJotId();
+      const { lines, syllables } = this.state.options;
+
+      if (lines) {
+        let linesResult = document.getElementById(`lines-result-${jotId}`);
+        linesResult.scrollTop = scrollTop;
+      }
+
+      if (syllables) {
+        let syllablesResult = document.getElementById(
+          `syllables-result-${jotId}`
+        );
+        syllablesResult.scrollTop = scrollTop;
+      }
+    }
+  };
+
+  onTextClear = () => {
+    const jotId = this.getCurrentJotId();
+    this.resetJot(jotId);
+
+    const pageText = document.getElementById(`page-text-${jotId}`);
+    pageText.focus();
+  };
   //#endregion
 
   render() {
+    const AlertMessage = () => {
+      if (this.state.options.copied || this.state.options.cleared) {
+        let message = "";
+        if (this.state.options.copied) {
+          message = this.state.jots[this.state.pagination.currentJot].text
+            ? "Copied!"
+            : "Nothing to copy!";
+          return <Alert message={message} />;
+        }
+        if (this.state.options.cleared) {
+          message = "Cleared!";
+          return <Alert message={message} />;
+        }
+      }
+
+      return null;
+    };
+
     return (
       <div
         className={
@@ -273,27 +458,24 @@ class Sheet extends Component {
           isDefaultTheme={this.state.isDefaultTheme}
           options={this.state.options}
           nav={this.state.nav}
-          toggleBackground={this.setIsDefaultTheme}
-          toggleSyllables={this.toggleSyllablesOption}
-          toggleLines={this.toggleLinesOption}
-          toggleWords={this.toggleWordsOption}
-          toggleCopied={this.toggleCopiedOption}
-          toggleNavBar={this.toggleNavBar}
-          toggleDropDown={this.toggleDropDown}
           onTextClear={this.onTextClear}
           closeMenu={this.resetNav}
+          addJot={this.addJot}
+          getCurrentJotId={this.getCurrentJotId}
+          {...this.toggles}
         />
+        <AlertMessage />
 
-        <Jots
-          isDefaultTheme={this.state.isDefaultTheme}
-          jot={this.state.jot}
-          nav={this.state.nav}
-          options={this.state.options}
-          onTextChange={this.onTextChange}
-          onTextScroll={this.onTextScroll}
-          onTextKeyDown={this.onTextKeyDown}
-          closeMenu={this.resetNav}
-        />
+        {this.state.mappedJots[this.state.pagination.currentJot]}
+
+        {this.state.mappedJots.length > 1 ? (
+          <Pagination
+            pagination={this.state.pagination}
+            nextJot={this.nextJot}
+            prevJot={this.prevJot}
+          />
+        ) : null}
+
         {this.state.options.words ? (
           <Footer
             isDefaultTheme={this.state.isDefaultTheme}
