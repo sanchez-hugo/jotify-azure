@@ -28,19 +28,6 @@ class Sheet extends Component {
       currentJot: 0,
       totalJots: 0,
     },
-    // jot: {
-    //   text: "",
-    //   lines: [],
-    //   counts: {
-    //     wordCount: 0,
-    //     lineCount: 0,
-    //     syllableCount: 0,
-    //   },
-    //   results: {
-    //     syllableResults: "",
-    //     lineResults: "",
-    //   },
-    // },
   };
 
   componentDidMount() {
@@ -53,6 +40,8 @@ class Sheet extends Component {
     const mappedJots = jots.map(this.mapJot);
     this.setJotsAndMappedJots(jots, mappedJots);
   }
+
+  componentWill;
 
   //#region Jot Management
   mapJot = (jot) => {
@@ -233,6 +222,7 @@ class Sheet extends Component {
   };
 
   toggles = {
+    // Passes all toggles to nav bar
     toggleBackground: this.setIsDefaultTheme,
     toggleSyllables: this.toggleSyllablesOption,
     toggleLines: this.toggleLinesOption,
@@ -245,6 +235,7 @@ class Sheet extends Component {
 
   resetNav = () => {
     const nav = { isNavBarOpen: false, isDropDownOpen: false };
+
     this.setState((prevState) => ({
       ...prevState,
       nav,
@@ -446,6 +437,8 @@ class Sheet extends Component {
       return null;
     };
 
+    const currentJot = this.state.mappedJots[this.state.pagination.currentJot];
+
     return (
       <div
         className={
@@ -459,14 +452,24 @@ class Sheet extends Component {
           options={this.state.options}
           nav={this.state.nav}
           onTextClear={this.onTextClear}
-          closeMenu={this.resetNav}
+          resetNav={this.resetNav}
           addJot={this.addJot}
           getCurrentJotId={this.getCurrentJotId}
           {...this.toggles}
         />
         <AlertMessage />
 
-        {this.state.mappedJots[this.state.pagination.currentJot]}
+        {console.log(this.state.jots)}
+        {this.state.jots.length > 0 ? <Jots
+          isDefaultTheme={this.state.isDefaultTheme}
+          jot={this.state.jots[this.state.pagination.currentJot]}
+          nav={this.state.nav}
+          options={this.state.options}
+          onTextChange={this.onTextChange}
+          onTextKeyDown={this.onTextKeyDown}
+          onTextScroll={this.onTextScroll}
+          closeMenu={this.resetNav}
+        /> : null}
 
         {this.state.mappedJots.length > 1 ? (
           <Pagination

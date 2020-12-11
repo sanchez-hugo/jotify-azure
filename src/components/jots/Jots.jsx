@@ -1,6 +1,7 @@
 import React from "react";
 
 const Jots = (props) => {
+
   const { isDefaultTheme, options, jot, nav } = props;
 
   const onPageClick = () => {
@@ -28,7 +29,7 @@ const Jots = (props) => {
     : "page-results-dark";
 
   return (
-    <div className="jots-page" onClick={onPageClick}>
+    <div id={`jot-${jot.id}`} className="jots-page" onClick={onPageClick}>
       <div className="row justify-content-center jot-title">
         {options.syllables ? (
           <div className="col-2 px-0">
