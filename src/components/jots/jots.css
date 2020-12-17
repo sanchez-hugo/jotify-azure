@@ -1,36 +1,17 @@
-.jots-page {
-  height: 80%;
-
-}
-
-.jot-title {
-  height: 2em;
-}
-
-.jot-content {
-  height: 100%;
-}
-
-.page-light {
-  background-color: #f8f9fa !important;
+.jot-text-light {
   color: #212529;
-  height: 100%;
 }
 
-.page-dark {
-  background-color: #212529 !important;
+.jot-text-dark {
   color: #f8f9fa;
-  height: 100%;
 }
 
-.jot-title-text {
+.any-textarea {
   appearance: none;
-  height: 100%;
+  height: 80vh;
   background: transparent;
   border: none;
   outline: none;
-  /* user-select: auto; */
-  color: #8d8d8d;
   font-family: monospace;
   font-size: 1em;
   letter-spacing: 0.1em;
@@ -40,42 +21,6 @@
   padding-right: 0em;
   width: 100%;
   word-wrap: break-word;
-}
-
-.page-text-light {
-  appearance: none;
-  height: 100%;
-  background: transparent;
-  border: none;
-  outline: none;
-  border-radius: 5px;
-  caret-color: #212529;
-  /* user-select: auto; */
-  color: #212529;
-  width: 100%;
-  font-family: monospace;
-  font-size: 1.2em;
-  letter-spacing: 0.1em;
-  resize: none;
-  white-space: nowrap;
-}
-
-.page-text-dark {
-  appearance: none;
-  height: 100%;
-  background: transparent;
-  border: none;
-  outline: none;
-  border-radius: 5px;
-  caret-color: #f8f9fa;
-  /* user-select: auto; */
-  color: #f8f9fa;
-  width: 100%;
-  font-family: monospace;
-  font-size: 1.2em;
-  letter-spacing: 0.1em;
-  resize: none;
-  white-space: nowrap;
 }
 
 textarea::-webkit-scrollbar {
@@ -89,25 +34,13 @@ textarea::-webkit-scrollbar-track {
   background: transparent;
 }
 
-textarea.page-text-light::-webkit-scrollbar-thumb {
-  background-color: #212529;
-  border-radius: 5px;
-}
-
-textarea.page-text-dark::-webkit-scrollbar-thumb {
-  background-color: #f8f9fa;
-  border-radius: 5px;
-}
-
-.page-results-light {
+.page-results {
   appearance: none;
   height: 100%;
   background: transparent;
   border: none;
   outline: none;
   border-radius: 5px;
-  caret-color: #212529;
-  color: #212529;
   width: 100%;
   font-family: monospace;
   font-size: 1.2em;
@@ -116,24 +49,6 @@ textarea.page-text-dark::-webkit-scrollbar-thumb {
   resize: none;
 }
 
-.page-results-dark {
-  appearance: none;
-  height: 100%;
-  background: transparent;
-  border: none;
-  outline: none;
-  border-radius: 5px;
-  caret-color: #f8f9fa;
-  color: #f8f9fa;
-  width: 100%;
-  font-family: monospace;
-  font-size: 1.2em;
-  letter-spacing: 0.1em;
-  overflow: hidden;
-  resize: none;
-}
-
-.page-results-light,
-.page-results-dark::-webkit-scrollbar {
+.no-scroll::-webkit-scrollbar {
   width: none;
 }

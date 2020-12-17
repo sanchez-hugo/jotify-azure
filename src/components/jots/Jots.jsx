@@ -20,39 +20,31 @@ const Jots = (props) => {
     props.onTextKeyDown(e, jot.id);
   };
 
-  const pageTextClassName = isDefaultTheme
-    ? "page-text-light"
-    : "page-text-dark";
-
-  const pageResultsClassName = isDefaultTheme
-    ? "page-results-light"
-    : "page-results-dark";
-
   return (
-    <div id={`jot-${jot.id}`} className="jots-page" onClick={onPageClick}>
+    <div id={`jot-${jot.id}`} onClick={onPageClick}>
       <div className="row justify-content-center jot-title">
         {options.syllables ? (
           <div className="col-2 px-0">
-            <p className="jot-title-text text-right">Syll.</p>
+            <p className="text-right">Syll.</p>
           </div>
         ) : null}
 
         <div className="col px-3">
-          <p className="jot-title-text">Jots</p>
+          <p className="">Jots</p>
         </div>
         {options.lines ? (
           <div className="col-2 px-0">
-            <p className="jot-title-text text-left">Line</p>
+            <p className="text-left">Line</p>
           </div>
         ) : null}
       </div>
 
-      <div className="row justify-content-center jot-content">
+      <div className="row justify-content-center">
         {options.syllables ? (
           <div className="col-2 px-0">
             <textarea
               id={`syllables-result-${jot.id}`}
-              className={pageResultsClassName + " text-right"}
+              className={"any-textarea text-right"}
               value={
                 jot.results.syllableResults ? jot.results.syllableResults : ""
               }
@@ -70,7 +62,7 @@ const Jots = (props) => {
             autoFocus
             id={`page-text-${jot.id}`}
             placeholder="Jot away..."
-            className={pageTextClassName}
+            className={"any-textarea"}
             onChange={onJotTextChange}
             onScroll={onJotScroll}
             onKeyDown={onJotTextKeyDown}
@@ -82,7 +74,7 @@ const Jots = (props) => {
           <div className="col-2 px-0">
             <textarea
               id={`lines-result-${jot.id}`}
-              className={pageResultsClassName + " text-left"}
+              className={"any-textarea text-left"}
               value={jot.results.lineResults ? jot.results.lineResults : ""}
               readOnly
             />

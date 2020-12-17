@@ -23,7 +23,7 @@ class Sheet extends Component {
       cleared: false,
     },
     jots: [],
-    mappedJots: [],
+    // mappedJots: [],
     pagination: {
       currentJot: 0,
       totalJots: 0,
@@ -37,28 +37,30 @@ class Sheet extends Component {
 
     // Push to state
     const jots = [jot];
-    const mappedJots = jots.map(this.mapJot);
-    this.setJotsAndMappedJots(jots, mappedJots);
+    this.setJots(jots);
+
+    // const mappedJots = jots.map(this.mapJot);
+    // this.setJotsAndMappedJots(jots, mappedJots);
   }
 
   componentWill;
 
   //#region Jot Management
-  mapJot = (jot) => {
-    return (
-      <Jots
-        key={jot.id}
-        isDefaultTheme={this.state.isDefaultTheme}
-        jot={jot}
-        nav={this.state.nav}
-        options={this.state.options}
-        onTextChange={this.onTextChange}
-        onTextKeyDown={this.onTextKeyDown}
-        onTextScroll={this.onTextScroll}
-        closeMenu={this.resetNav}
-      />
-    );
-  };
+  // mapJot = (jot) => {
+  //   return (
+  //     <Jots
+  //       key={jot.id}
+  //       isDefaultTheme={this.state.isDefaultTheme}
+  //       jot={jot}
+  //       nav={this.state.nav}
+  //       options={this.state.options}
+  //       onTextChange={this.onTextChange}
+  //       onTextKeyDown={this.onTextKeyDown}
+  //       onTextScroll={this.onTextScroll}
+  //       closeMenu={this.resetNav}
+  //     />
+  //   );
+  // };
 
   getEmptyJot = (id) => {
     if (!id) id = this.getNewJotId();
@@ -110,14 +112,15 @@ class Sheet extends Component {
     const id = this.getNewJotId();
 
     const jot = this.getEmptyJot(id);
-    const mappedJot = this.mapJot(jot);
+    // const mappedJot = this.mapJot(jot);
 
-    const { jots, mappedJots } = this.state;
-
+    const { jots } = this.state;
     jots.push(jot);
-    mappedJots.push(mappedJot);
+    this.setJots(jots);
 
-    this.setJotsAndMappedJots(jots, mappedJots);
+    // const { jots, mappedJots } = this.state;
+    // mappedJots.push(mappedJot);
+    // this.setJotsAndMappedJots(jots, mappedJots);
   };
 
   nextJot = () => {
@@ -278,12 +281,16 @@ class Sheet extends Component {
     const loadedJot = this.getLoadedJot(text, jotId);
 
     // replace respective jot
-    const { jots, mappedJots } = this.state;
+    const { jots } = this.state;
     jots[jotId - 1] = loadedJot;
-    mappedJots[jotId - 1] = this.mapJot(loadedJot);
 
     // save new jot info
-    this.setJotsAndMappedJots(jots, mappedJots);
+    this.setJots(jots);
+
+    // const { jots, mappedJots } = this.state;
+    // jots[jotId - 1] = loadedJot;
+    // mappedJots[jotId - 1] = this.mapJot(loadedJot);
+    // this.setJotsAndMappedJots(jots, mappedJots);
   };
 
   getLoadedJot = (text, id) => {
@@ -369,20 +376,23 @@ class Sheet extends Component {
     return results;
   };
 
-  setJotsAndMappedJots = (jots, mappedJots) => {
-    this.setState((prevState) => ({ ...prevState, jots, mappedJots }));
+  setJots = (jots) => {
+    this.setState((prevState) => ({ ...prevState, jots }));
   };
 
   resetJot = (id) => {
     const emptiedJot = this.getEmptyJot(id);
-    const { jots, mappedJots } = this.state;
+    const { jots } = this.state;
 
     const jotIndex = this.findJotIndexFromId(id, jots);
 
     jots[jotIndex] = emptiedJot;
-    mappedJots[jotIndex] = this.mapJot(emptiedJot);
 
-    this.setJotsAndMappedJots(jots, mappedJots);
+    this.setJots(jots);
+
+    // const { jots, mappedJots } = this.state;
+    // mappedJots[jotIndex] = this.mapJot(emptiedJot);
+    // this.setJotsAndMappedJots(jots, mappedJots);
   };
 
   //#endregion
@@ -437,8 +447,6 @@ class Sheet extends Component {
       return null;
     };
 
-    const currentJot = this.state.mappedJots[this.state.pagination.currentJot];
-
     return (
       <div
         className={
@@ -458,20 +466,26 @@ class Sheet extends Component {
           {...this.toggles}
         />
         <AlertMessage />
+        {this.state.jots.length > 1 ? (
+          <p className="text-center">{`Jot ${
+            this.state.pagination.currentJot + 1
+          } of ${this.state.jots.length}`}</p>
+        ) : null}
 
-        {console.log(this.state.jots)}
-        {this.state.jots.length > 0 ? <Jots
-          isDefaultTheme={this.state.isDefaultTheme}
-          jot={this.state.jots[this.state.pagination.currentJot]}
-          nav={this.state.nav}
-          options={this.state.options}
-          onTextChange={this.onTextChange}
-          onTextKeyDown={this.onTextKeyDown}
-          onTextScroll={this.onTextScroll}
-          closeMenu={this.resetNav}
-        /> : null}
+        {this.state.jots.length > 0 ? (
+          <Jots
+            isDefaultTheme={this.state.isDefaultTheme}
+            jot={this.state.jots[this.state.pagination.currentJot]}
+            nav={this.state.nav}
+            options={this.state.options}
+            onTextChange={this.onTextChange}
+            onTextKeyDown={this.onTextKeyDown}
+            onTextScroll={this.onTextScroll}
+            closeMenu={this.resetNav}
+          />
+        ) : null}
 
-        {this.state.mappedJots.length > 1 ? (
+        {this.state.jots.length > 1 ? (
           <Pagination
             pagination={this.state.pagination}
             nextJot={this.nextJot}
