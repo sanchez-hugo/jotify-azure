@@ -397,7 +397,8 @@ class Sheet extends Component {
     const jotId = this.getCurrentJotId();
     this.resetJot(jotId);
 
-    const pageText = document.getElementById(`page-text-${jotId}`);
+    // TODO - this should prob move to navbar
+    const pageText = document.getElementById(`textarea-jot`);
     pageText.focus();
   };
   //#endregion
@@ -432,7 +433,7 @@ class Sheet extends Component {
           options={this.state.options}
           nav={this.state.nav}
           onTextClear={this.onTextClear}
-          resetNav={this.resetNav}
+          closeMenu={this.resetNav}
           addJot={this.addJot}
           getCurrentJotId={this.getCurrentJotId}
           {...this.toggles}

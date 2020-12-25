@@ -26,7 +26,7 @@ const NavBar = (props) => {
         screenfull.request();
         setIsFullscreen(true);
       }
-      if (nav.isNavBarOpen || nav.isDropDownOpen) props.resetNav();
+      if (nav.isNavBarOpen || nav.isDropDownOpen) props.closeMenu();
     };
 
     const onCollapseClick = () => {
@@ -34,7 +34,7 @@ const NavBar = (props) => {
         screenfull.exit();
         setIsFullscreen(false);
       }
-      if (nav.isNavBarOpen || nav.isDropDownOpen) props.resetNav();
+      if (nav.isNavBarOpen || nav.isDropDownOpen) props.closeMenu();
     };
 
     return screenfull.isEnabled ? (
@@ -53,7 +53,7 @@ const NavBar = (props) => {
     const onClearClick = (e) => {
       e.preventDefault();
       props.onTextClear();
-      if (nav.isNavBarOpen || nav.isDropDownOpen) props.resetNav();
+      if (nav.isNavBarOpen || nav.isDropDownOpen) props.closeMenu();
       props.toggleCleared();
     };
 
@@ -73,9 +73,8 @@ const NavBar = (props) => {
   const ClipboardNavItem = () => {
     const onCopyClick = (e) => {
       e.preventDefault();
-      const jotId = props.getCurrentJotId();
 
-      let pageText = document.getElementById(`page-text-${jotId}`);
+      let pageText = document.getElementById(`textarea-jot`);
       pageText.select();
       document.execCommand("copy");
       pageText.setSelectionRange(0, 0);
@@ -132,22 +131,22 @@ const NavBar = (props) => {
 
     const onToggleLinesClick = () => {
       props.toggleLines();
-      if (nav.isNavBarOpen || nav.isDropDownOpen) props.resetNav();
+      if (nav.isNavBarOpen || nav.isDropDownOpen) props.closeMenu();
     };
 
     const onToggleSyllablesClick = () => {
       props.toggleSyllables();
-      if (nav.isNavBarOpen || nav.isDropDownOpen) props.resetNav();
+      if (nav.isNavBarOpen || nav.isDropDownOpen) props.closeMenu();
     };
 
     const onToggleWordsClick = () => {
       props.toggleWords();
-      if (nav.isNavBarOpen || nav.isDropDownOpen) props.resetNav();
+      if (nav.isNavBarOpen || nav.isDropDownOpen) props.closeMenu();
     };
 
     const onAddSheetClick = () => {
       props.addJot();
-      if (nav.isNavBarOpen || nav.isDropDownOpen) props.resetNav();
+      if (nav.isNavBarOpen || nav.isDropDownOpen) props.closeMenu();
     };
 
     return (

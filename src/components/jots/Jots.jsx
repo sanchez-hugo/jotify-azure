@@ -2,7 +2,7 @@ import React from "react";
 import "./jots.css";
 
 const Jots = (props) => {
-  const { isDefaultTheme, options, jot, nav } = props;
+  const { options, jot, nav } = props;
 
   const onPageClick = () => {
     if (nav.isNavBarOpen || nav.isDropDownOpen) props.closeMenu();
@@ -63,7 +63,7 @@ const Jots = (props) => {
             autoFocus
             id={`textarea-jot`}
             placeholder="Jot away..."
-            className={"any-textarea"}
+            className={`any-textarea center-textarea`}
             onChange={onJotTextChange}
             onScroll={onJotScroll}
             onKeyDown={onJotTextKeyDown}

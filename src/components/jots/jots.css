@@ -9,7 +9,7 @@
 
 .any-textarea {
   appearance: none;
-  height: 80vh;
+  height: 70vh;
   background: transparent;
   border: none;
   outline: none;
@@ -21,9 +21,12 @@
   padding-left: 0em;
   padding-right: 0em;
   width: 100%;
-  word-wrap: break-word;
   resize: none;
   color: inherit;
+}
+
+.center-textarea {
+  white-space: nowrap;
 }
 
 textarea::-webkit-scrollbar {
@@ -35,23 +38,4 @@ textarea::-webkit-scrollbar {
 
 textarea::-webkit-scrollbar-track {
   background: transparent;
-}
-
-.textarea-results {
-  appearance: none;
-  height: 100%;
-  background: transparent;
-  border: none;
-  outline: none;
-  border-radius: 5px;
-  width: 100%;
-  font-family: monospace;
-  font-size: 1.2em;
-  letter-spacing: 0.1em;
-  overflow: hidden;
-  resize: none;
-}
-
-.no-scroll::-webkit-scrollbar {
-  width: none;
 }
