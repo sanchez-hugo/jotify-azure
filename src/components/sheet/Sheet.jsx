@@ -89,15 +89,20 @@ class Sheet extends Component {
     const id = this.getNewJotId();
 
     const jot = this.getEmptyJot(id);
-    // const mappedJot = this.mapJot(jot);
 
     const { jots } = this.state;
     jots.push(jot);
     this.setJots(jots);
+  };
 
-    // const { jots, mappedJots } = this.state;
-    // mappedJots.push(mappedJot);
-    // this.setJotsAndMappedJots(jots, mappedJots);
+  removeJot = () => {
+    if (this.state.pagination.totalJots > 1) {
+      const id = this.getCurrentJotId();
+      const jots = this.state.jots.filter((jot) => jot.id !== id);
+      this.setJots(jots);
+      this.setCurrentJot(0); // should calc instead of reset
+      this.setTotalJots(jots.length);
+    }
   };
 
   nextJot = () => {
@@ -250,7 +255,6 @@ class Sheet extends Component {
       this.findCounts(value, id);
     }
   };
-
 
   findCounts = (text, jotId) => {
     if (!text) return;
@@ -436,11 +440,11 @@ class Sheet extends Component {
           onTextClear={this.onTextClear}
           closeMenu={this.resetNav}
           addJot={this.addJot}
+          removeJot={this.removeJot}
           getCurrentJotId={this.getCurrentJotId}
           {...this.toggles}
         />
         <AlertMessage />
-
 
         {this.state.jots.length > 0 ? (
           <Jots

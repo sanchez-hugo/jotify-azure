@@ -149,6 +149,11 @@ const NavBar = (props) => {
       if (nav.isNavBarOpen || nav.isDropDownOpen) props.closeMenu();
     };
 
+    const onRemoveSheetClick = () => {
+      props.removeJot();
+      if (nav.isNavBarOpen || nav.isDropDownOpen) props.closeMenu();
+    };
+
     return (
       <li
         className={
@@ -195,6 +200,9 @@ const NavBar = (props) => {
           </button>
           <button className="btn dropdown-item" onClick={onAddSheetClick}>
             Add Sheet
+          </button>
+          <button className="btn dropdown-item" onClick={onRemoveSheetClick}>
+            Remove Sheet
           </button>
         </div>
       </li>
