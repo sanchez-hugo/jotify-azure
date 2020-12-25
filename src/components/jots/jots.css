@@ -1,9 +1,10 @@
-.jot-text-light {
-  color: #212529;
+.jot-container {
+  height: 1000px;
+  color: inherit;
 }
 
-.jot-text-dark {
-  color: #f8f9fa;
+.text-container {
+  height: 100%;
 }
 
 .any-textarea {
@@ -21,6 +22,8 @@
   padding-right: 0em;
   width: 100%;
   word-wrap: break-word;
+  resize: none;
+  color: inherit;
 }
 
 textarea::-webkit-scrollbar {
@@ -34,7 +37,7 @@ textarea::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.page-results {
+.textarea-results {
   appearance: none;
   height: 100%;
   background: transparent;

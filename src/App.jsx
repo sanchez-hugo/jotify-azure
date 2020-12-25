@@ -4,11 +4,7 @@ import Sheet from "./components/sheet/Sheet";
 
 class App extends Component {
   render() {
-    return (
-      <>
-          <Sheet />
-      </>
-    );
+    return <Sheet />;
   }
 }
 

@@ -5,7 +5,7 @@ import Jots from "../jots/Jots";
 import "./sheet.css";
 import { countSyllablesInWord } from "../../services/pageService";
 import Footer from "../layout/Footer";
-import Pagination from "../layout/Pagination";
+
 // import PropTypes from "prop-types";
 
 class Sheet extends Component {
@@ -23,7 +23,6 @@ class Sheet extends Component {
       cleared: false,
     },
     jots: [],
-    // mappedJots: [],
     pagination: {
       currentJot: 0,
       totalJots: 0,
@@ -38,29 +37,7 @@ class Sheet extends Component {
     // Push to state
     const jots = [jot];
     this.setJots(jots);
-
-    // const mappedJots = jots.map(this.mapJot);
-    // this.setJotsAndMappedJots(jots, mappedJots);
   }
-
-  componentWill;
-
-  //#region Jot Management
-  // mapJot = (jot) => {
-  //   return (
-  //     <Jots
-  //       key={jot.id}
-  //       isDefaultTheme={this.state.isDefaultTheme}
-  //       jot={jot}
-  //       nav={this.state.nav}
-  //       options={this.state.options}
-  //       onTextChange={this.onTextChange}
-  //       onTextKeyDown={this.onTextKeyDown}
-  //       onTextScroll={this.onTextScroll}
-  //       closeMenu={this.resetNav}
-  //     />
-  //   );
-  // };
 
   getEmptyJot = (id) => {
     if (!id) id = this.getNewJotId();
@@ -400,21 +377,18 @@ class Sheet extends Component {
   //#region Non-Editing Event Handlers
   onTextScroll = (e) => {
     const target = e.target;
-    const { scrollTop } = target;
     if (this.state.options.lines || this.state.options.syllables) {
-      const jotId = this.getCurrentJotId();
+      const { scrollTop } = target;
       const { lines, syllables } = this.state.options;
 
-      if (lines) {
-        let linesResult = document.getElementById(`lines-result-${jotId}`);
-        linesResult.scrollTop = scrollTop;
+      if (syllables) {
+        let sylTextarea = document.getElementById(`textarea-syllables`);
+        sylTextarea.scrollTop = scrollTop;
       }
 
-      if (syllables) {
-        let syllablesResult = document.getElementById(
-          `syllables-result-${jotId}`
-        );
-        syllablesResult.scrollTop = scrollTop;
+      if (lines) {
+        let lineTextarea = document.getElementById(`textarea-lines`);
+        lineTextarea.scrollTop = scrollTop;
       }
     }
   };
@@ -449,11 +423,9 @@ class Sheet extends Component {
 
     return (
       <div
-        className={
-          this.state.isDefaultTheme
-            ? "container-fluid app-light"
-            : "container-fluid app-dark"
-        }
+        className={`container-fluid full-height ${
+          this.state.isDefaultTheme ? "sheet-light" : "sheet-dark"
+        }`}
       >
         <NavBar
           isDefaultTheme={this.state.isDefaultTheme}
@@ -466,11 +438,7 @@ class Sheet extends Component {
           {...this.toggles}
         />
         <AlertMessage />
-        {this.state.jots.length > 1 ? (
-          <p className="text-center">{`Jot ${
-            this.state.pagination.currentJot + 1
-          } of ${this.state.jots.length}`}</p>
-        ) : null}
+
 
         {this.state.jots.length > 0 ? (
           <Jots
@@ -485,19 +453,15 @@ class Sheet extends Component {
           />
         ) : null}
 
-        {this.state.jots.length > 1 ? (
-          <Pagination
-            pagination={this.state.pagination}
-            nextJot={this.nextJot}
-            prevJot={this.prevJot}
-          />
-        ) : null}
-
-        {this.state.options.words ? (
+        {this.state.jots.length > 0 ? (
           <Footer
             isDefaultTheme={this.state.isDefaultTheme}
-            counts={this.state.jot.counts}
+            counts={this.state.jots[this.state.pagination.currentJot].counts}
             options={this.state.options}
+            pagination={this.state.pagination}
+            jotCount={this.state.jots.length}
+            nextJot={this.nextJot}
+            prevJot={this.prevJot}
           />
         ) : null}
       </div>

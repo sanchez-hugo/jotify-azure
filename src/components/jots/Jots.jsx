@@ -1,7 +1,7 @@
 import React from "react";
+import "./jots.css";
 
 const Jots = (props) => {
-
   const { isDefaultTheme, options, jot, nav } = props;
 
   const onPageClick = () => {
@@ -20,30 +20,35 @@ const Jots = (props) => {
     props.onTextKeyDown(e, jot.id);
   };
 
+  const jotHeadBodyClass = "row justify-content-center";
+  const sideColClass = "col-2 px-0";
+  const centerColClass = "col px-md-5";
+
   return (
-    <div id={`jot-${jot.id}`} onClick={onPageClick}>
-      <div className="row justify-content-center jot-title">
+    <div onClick={onPageClick} className="jot-container">
+      <div id="jot-header" className={jotHeadBodyClass}>
         {options.syllables ? (
-          <div className="col-2 px-0">
+          <div className={sideColClass}>
             <p className="text-right">Syll.</p>
           </div>
         ) : null}
 
-        <div className="col px-3">
+        <div className={centerColClass}>
           <p className="">Jots</p>
         </div>
+
         {options.lines ? (
-          <div className="col-2 px-0">
+          <div className={sideColClass}>
             <p className="text-left">Line</p>
           </div>
         ) : null}
       </div>
 
-      <div className="row justify-content-center">
+      <div id="jot-body" className={jotHeadBodyClass}>
         {options.syllables ? (
-          <div className="col-2 px-0">
+          <div className={sideColClass}>
             <textarea
-              id={`syllables-result-${jot.id}`}
+              id="textarea-syllables"
               className={"any-textarea text-right"}
               value={
                 jot.results.syllableResults ? jot.results.syllableResults : ""
@@ -53,14 +58,10 @@ const Jots = (props) => {
           </div>
         ) : null}
 
-        <div
-          className={
-            isDefaultTheme ? "page-light col px-3" : "page-dark col px-3"
-          }
-        >
+        <div className={`${centerColClass} text-container`}>
           <textarea
             autoFocus
-            id={`page-text-${jot.id}`}
+            id={`textarea-jot`}
             placeholder="Jot away..."
             className={"any-textarea"}
             onChange={onJotTextChange}
@@ -71,9 +72,9 @@ const Jots = (props) => {
         </div>
 
         {options.lines ? (
-          <div className="col-2 px-0">
+          <div className={sideColClass}>
             <textarea
-              id={`lines-result-${jot.id}`}
+              id="textarea-lines"
               className={"any-textarea text-left"}
               value={jot.results.lineResults ? jot.results.lineResults : ""}
               readOnly
