@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import "./jots.css";
 
 const Jots = (props) => {
+  const [isCtrlActive, setIsCtrlActive] = useState(false);
   const { options, jot, nav } = props;
 
   const onPageClick = () => {
@@ -17,7 +18,21 @@ const Jots = (props) => {
   };
 
   const onJotTextKeyDown = (e) => {
-    props.onTextKeyDown(e, jot.id);
+    const event = e;
+    const code = event.keyCode || event.charCode;
+
+    if (code === 17) setIsCtrlActive(true);
+    else if (isCtrlActive) {
+      if (code === 37) {
+        props.prevJot();
+      } else if (code === 39) {
+        props.nextJot();
+      }
+      setIsCtrlActive(false);
+    } else {
+      props.onTextKeyDown(event, jot.id);
+      setIsCtrlActive(false);
+    }
   };
 
   const jotHeadBodyClass = "row justify-content-center";
@@ -29,17 +44,23 @@ const Jots = (props) => {
       <div id="jot-header" className={jotHeadBodyClass}>
         {options.syllables ? (
           <div className={sideColClass}>
-            <p className="text-right">Syll.</p>
+            <p className="text-right">
+              <small>Syll.</small>
+            </p>
           </div>
         ) : null}
 
         <div className={centerColClass}>
-          <p className="">Jots</p>
+          <p className="text-left">
+            <small>{`Jot`}</small>
+          </p>
         </div>
 
         {options.lines ? (
           <div className={sideColClass}>
-            <p className="text-left">Line</p>
+            <p className="text-left">
+              <small>Line</small>
+            </p>
           </div>
         ) : null}
       </div>

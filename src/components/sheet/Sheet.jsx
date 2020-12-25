@@ -251,6 +251,7 @@ class Sheet extends Component {
     }
   };
 
+
   findCounts = (text, jotId) => {
     if (!text) return;
 
@@ -451,6 +452,8 @@ class Sheet extends Component {
             onTextKeyDown={this.onTextKeyDown}
             onTextScroll={this.onTextScroll}
             closeMenu={this.resetNav}
+            nextJot={this.nextJot}
+            prevJot={this.prevJot}
           />
         ) : null}
 

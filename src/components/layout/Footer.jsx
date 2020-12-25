@@ -9,7 +9,7 @@ const Footer = (props) => {
         {props.options.words ? (
           <div className="row justify-content-center">
             <input
-              className={props.isDefaultTheme ? "msg-light" : "msg-dark"}
+              className={`footer-text`}
               type="text"
               value={`${props.counts.wordCount} words`}
               readOnly

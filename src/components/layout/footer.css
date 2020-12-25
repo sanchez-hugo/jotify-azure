@@ -1,22 +1,9 @@
-.msg-light {
+.footer-text {
   appearance: none;
   background: transparent;
   outline: none;
   border: none;
-  color: #212529;
-  font-family: monospace;
-  font-size: 1.1em;
-  letter-spacing: 0.1em;
-  text-align: center;
-  width: 100%;
-}
-
-.msg-dark {
-  appearance: none;
-  background: transparent;
-  outline: none;
-  border: none;
-  color: #f8f9fa;
+  color: inherit;
   font-family: monospace;
   font-size: 1.1em;
   letter-spacing: 0.1em;
