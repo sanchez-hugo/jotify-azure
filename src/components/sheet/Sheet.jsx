@@ -6,6 +6,8 @@ import "./sheet.css";
 import { countSyllablesInWord } from "../../services/pageService";
 import Footer from "../layout/Footer";
 
+const secondsOfAlert = 2000;
+
 class Sheet extends Component {
   state = {
     isDefaultTheme: true,
@@ -19,6 +21,10 @@ class Sheet extends Component {
       words: false,
       copied: false,
       cleared: false,
+    },
+    alerts: {
+      wasJotAdded: false,
+      wasJotRemoved: false,
     },
     jots: [],
     pagination: {
@@ -59,55 +65,41 @@ class Sheet extends Component {
     return jot;
   };
 
-  getNewJotId = () => {
-    const id = this.state.idCounter + 1;
-    const totalJots = this.state.pagination.totalJots + 1;
-    this.setNewJot(totalJots, id);
-
-    return id;
-  };
-
-  getCurrentJotId = (jots) => {
-    if (!jots) jots = this.state.jots;
-    const id = jots[this.state.pagination.currentJot].id;
-    return id;
-  };
-
-  findJotIndexFromId = (id, jots) => {
-    if (!jots) jots = this.state.jots;
-    const isIdOf = (jot) => jot.id === id;
-    const jotIndex = jots.findIndex(isIdOf);
-    return jotIndex;
-  };
-
-  findIdFromJotIndex = (index, jots) => {
-    if (!jots) jots = this.state.jots;
-    const id = jots[index].id;
-    return id;
-  };
-
   addJot = () => {
+    // Jots
     const jot = this.getEmptyJotWithId();
     const { jots } = this.state;
     jots.push(jot);
-    this.setJots(jots);
+
+    // Pagination
+    const currentJot = jots.length - 1;
+    const totalJots = jots.length;
+    const pagination = { currentJot, totalJots };
+
+    this.setJotsAndPagination(jots, pagination);
+
+    if (jots.length > 1) this.toggleJotAddedAlert();
   };
 
   removeJot = () => {
     if (this.state.pagination.totalJots > 1) {
+      // Jots
       const id = this.getCurrentJotId();
       const jots = this.state.jots.filter((jot) => jot.id !== id);
       this.setJots(jots);
 
-      // TODO - calc a better method of current jot
-      const currentJot = 0; // maybe same current jot if exists?
+      // Pagination
+      let currentJot = this.state.pagination.currentJot;
+      if (!jots[currentJot]) currentJot -= 1;
+      if (currentJot < 0) currentJot = 0;
       const totalJots = jots.length;
       const pagination = {
         currentJot,
         totalJots,
       };
 
-      this.setPagination(pagination);
+      this.setJotsAndPagination(jots, pagination);
+      this.toggleJotRemovedAlert();
     }
   };
 
@@ -131,9 +123,38 @@ class Sheet extends Component {
 
     this.setJots(jots);
   };
+
+  getNewJotId = () => {
+    const id = this.state.idCounter + 1;
+    this.setIdCounter(id);
+    return id;
+  };
+
+  getCurrentJotId = (jots) => {
+    if (!jots) jots = this.state.jots;
+    const id = jots[this.state.pagination.currentJot].id;
+    return id;
+  };
+
+  findJotIndexFromId = (id, jots) => {
+    if (!jots) jots = this.state.jots;
+    const isIdOf = (jot) => jot.id === id;
+    const jotIndex = jots.findIndex(isIdOf);
+    return jotIndex;
+  };
+
+  findIdFromJotIndex = (index, jots) => {
+    if (!jots) jots = this.state.jots;
+    const id = jots[index].id;
+    return id;
+  };
   //#endregion
 
   //#region Toggles
+  toggleTheme = () => {
+    const isDefaultTheme = !this.state.isDefaultTheme;
+    this.setState((prevState) => ({ ...prevState, isDefaultTheme }));
+  };
 
   toggleLinesOption = () => {
     const lines = !this.state.options.lines;
@@ -168,7 +189,7 @@ class Sheet extends Component {
       }),
       () => {
         if (this.state.options.copied)
-          setTimeout(this.toggleCopiedOption, 2000);
+          setTimeout(this.toggleCopiedOption, secondsOfAlert);
       }
     );
   };
@@ -182,7 +203,7 @@ class Sheet extends Component {
       }),
       () => {
         if (this.state.options.cleared)
-          setTimeout(this.toggleClearedOption, 2000);
+          setTimeout(this.toggleClearedOption, secondsOfAlert);
       }
     );
   };
@@ -205,7 +226,7 @@ class Sheet extends Component {
 
   toggles = {
     // Passes all toggles to nav bar
-    toggleBackground: this.setIsDefaultTheme,
+    toggleBackground: this.toggleTheme,
     toggleSyllables: this.toggleSyllablesOption,
     toggleLines: this.toggleLinesOption,
     toggleWords: this.toggleWordsOption,
@@ -213,6 +234,32 @@ class Sheet extends Component {
     toggleCleared: this.toggleClearedOption,
     toggleNavBar: this.toggleNavBar,
     toggleDropDown: this.toggleDropDown,
+  };
+
+  toggleJotAddedAlert = () => {
+    const { alerts } = this.state;
+    alerts.wasJotAdded = !alerts.wasJotAdded;
+
+    this.setState(
+      (prevState) => ({ ...prevState, alerts }),
+      () => {
+        if (this.state.alerts.wasJotAdded)
+          setTimeout(this.toggleJotAddedAlert, secondsOfAlert);
+      }
+    );
+  };
+
+  toggleJotRemovedAlert = () => {
+    const { alerts } = this.state;
+    alerts.wasJotRemoved = !alerts.wasJotRemoved;
+
+    this.setState(
+      (prevState) => ({ ...prevState, alerts }),
+      () => {
+        if (this.state.alerts.wasJotRemoved)
+          setTimeout(this.toggleJotRemovedAlert, secondsOfAlert);
+      }
+    );
   };
 
   //#endregion
@@ -366,21 +413,8 @@ class Sheet extends Component {
   //#endregion
 
   //#region State Management
-
-  /* ----- Jots ----- */
-  setNewJot = (totalJots, id) => {
-    const pagination = this.state.pagination;
-    pagination.totalJots = totalJots;
-    const idCounter = id;
-
-    this.setState((prevState) => ({ ...prevState, pagination, idCounter }));
-  };
-
-  setTotalJots = (totalJots) => {
-    this.setState((prevState) => ({
-      ...prevState,
-      pagination: { ...prevState.pagination, totalJots },
-    }));
+  setIdCounter = (idCounter) => {
+    this.setState((prevState) => ({ ...prevState, idCounter }));
   };
 
   setCurrentJot = (currentJot) => {
@@ -398,11 +432,8 @@ class Sheet extends Component {
     this.setState((prevState) => ({ ...prevState, jots }));
   };
 
-  /* ----- Toggles ----- */
-
-  setIsDefaultTheme = () => {
-    const isDefaultTheme = !this.state.isDefaultTheme;
-    this.setState((prevState) => ({ ...prevState, isDefaultTheme }));
+  setJotsAndPagination = (jots, pagination) => {
+    this.setState((prevState) => ({ ...prevState, jots, pagination }));
   };
 
   resetNav = () => {
@@ -413,8 +444,6 @@ class Sheet extends Component {
       nav,
     }));
   };
-
-  /* ----- Events ----- */
 
   //#endregion
 
@@ -432,6 +461,12 @@ class Sheet extends Component {
           message = "Cleared!";
           return <Alert message={message} />;
         }
+      } else if (this.state.alerts.wasJotAdded) {
+        const message = `Jot added!`;
+        return <Alert message={message} type="success" />;
+      } else if (this.state.alerts.wasJotRemoved) {
+        const message = `Jot removed!`;
+        return <Alert message={message} type="danger" />;
       }
 
       return null;
