@@ -15,7 +15,7 @@ import screenfull from "screenfull";
 import InfoModal from "../modals/InfoModal";
 
 const NavBar = (props) => {
-  const { isDefaultTheme, nav, options } = props;
+  const { isDefaultTheme, nav, options, totalJots } = props;
 
   const [isFullscreen, setIsFullscreen] = useState(false);
 
@@ -201,9 +201,11 @@ const NavBar = (props) => {
           <button className="btn dropdown-item" onClick={onAddSheetClick}>
             Add Sheet
           </button>
-          <button className="btn dropdown-item" onClick={onRemoveSheetClick}>
-            Remove Sheet
-          </button>
+          {totalJots > 1 ? (
+            <button className="btn dropdown-item" onClick={onRemoveSheetClick}>
+              Remove Sheet
+            </button>
+          ) : null}
         </div>
       </li>
     );

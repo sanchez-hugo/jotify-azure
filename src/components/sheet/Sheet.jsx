@@ -6,8 +6,6 @@ import "./sheet.css";
 import { countSyllablesInWord } from "../../services/pageService";
 import Footer from "../layout/Footer";
 
-// import PropTypes from "prop-types";
-
 class Sheet extends Component {
   state = {
     isDefaultTheme: true,
@@ -27,21 +25,16 @@ class Sheet extends Component {
       currentJot: 0,
       totalJots: 0,
     },
+    idCounter: 0,
   };
 
   componentDidMount() {
-    // Create the first jot
-    const id = this.getNewJotId();
-    const jot = this.getEmptyJot(id);
-
-    // Push to state
-    const jots = [jot];
-    this.setJots(jots);
+    this.addJot();
   }
 
-  getEmptyJot = (id) => {
-    if (!id) id = this.getNewJotId();
+  //#region Jots
 
+  getEmptyJot = (id) => {
     const jot = {
       id,
       text: "",
@@ -60,9 +53,17 @@ class Sheet extends Component {
     return jot;
   };
 
+  getEmptyJotWithId = () => {
+    const id = this.getNewJotId();
+    const jot = this.getEmptyJot(id);
+    return jot;
+  };
+
   getNewJotId = () => {
-    const id = this.state.pagination.totalJots + 1;
-    this.setTotalJots(id);
+    const id = this.state.idCounter + 1;
+    const totalJots = this.state.pagination.totalJots + 1;
+    this.setNewJot(totalJots, id);
+
     return id;
   };
 
@@ -86,10 +87,7 @@ class Sheet extends Component {
   };
 
   addJot = () => {
-    const id = this.getNewJotId();
-
-    const jot = this.getEmptyJot(id);
-
+    const jot = this.getEmptyJotWithId();
     const { jots } = this.state;
     jots.push(jot);
     this.setJots(jots);
@@ -100,8 +98,16 @@ class Sheet extends Component {
       const id = this.getCurrentJotId();
       const jots = this.state.jots.filter((jot) => jot.id !== id);
       this.setJots(jots);
-      this.setCurrentJot(0); // should calc instead of reset
-      this.setTotalJots(jots.length);
+
+      // TODO - calc a better method of current jot
+      const currentJot = 0; // maybe same current jot if exists?
+      const totalJots = jots.length;
+      const pagination = {
+        currentJot,
+        totalJots,
+      };
+
+      this.setPagination(pagination);
     }
   };
 
@@ -115,28 +121,19 @@ class Sheet extends Component {
     if (this.state.jots[prevJot]) this.setCurrentJot(prevJot);
   };
 
-  setTotalJots = (totalJots) => {
-    this.setState((prevState) => ({
-      ...prevState,
-      pagination: { ...prevState.pagination, totalJots },
-    }));
-  };
+  resetJot = (id) => {
+    const emptiedJot = this.getEmptyJot(id);
+    const { jots } = this.state;
 
-  setCurrentJot = (currentJot) => {
-    this.setState((prevState) => ({
-      ...prevState,
-      pagination: { ...prevState.pagination, currentJot },
-    }));
-  };
+    const jotIndex = this.findJotIndexFromId(id, jots);
 
+    jots[jotIndex] = emptiedJot;
+
+    this.setJots(jots);
+  };
   //#endregion
 
   //#region Toggles
-
-  setIsDefaultTheme = () => {
-    const isDefaultTheme = !this.state.isDefaultTheme;
-    this.setState((prevState) => ({ ...prevState, isDefaultTheme }));
-  };
 
   toggleLinesOption = () => {
     const lines = !this.state.options.lines;
@@ -218,26 +215,9 @@ class Sheet extends Component {
     toggleDropDown: this.toggleDropDown,
   };
 
-  resetNav = () => {
-    const nav = { isNavBarOpen: false, isDropDownOpen: false };
-
-    this.setState((prevState) => ({
-      ...prevState,
-      nav,
-    }));
-  };
-
   //#endregion
 
-  //#region Jot Editing
-  /**
-   * Each jots, should be able to edit:
-   *  1. text
-   *  2. lines
-   *  3. counts
-   *  4. results
-   */
-
+  //#region Jot Events
   onTextChange = (e, id) => {
     const event = e;
     const { value } = event.target;
@@ -256,6 +236,35 @@ class Sheet extends Component {
     }
   };
 
+  onTextScroll = (e) => {
+    const target = e.target;
+    if (this.state.options.lines || this.state.options.syllables) {
+      const { scrollTop } = target;
+      const { lines, syllables } = this.state.options;
+
+      if (syllables) {
+        let sylTextarea = document.getElementById(`textarea-syllables`);
+        sylTextarea.scrollTop = scrollTop;
+      }
+
+      if (lines) {
+        let lineTextarea = document.getElementById(`textarea-lines`);
+        lineTextarea.scrollTop = scrollTop;
+      }
+    }
+  };
+
+  onTextClear = () => {
+    const jotId = this.getCurrentJotId();
+    this.resetJot(jotId);
+
+    // TODO - this should prob move to navbar
+    const pageText = document.getElementById(`textarea-jot`);
+    pageText.focus();
+  };
+  //#endregion
+
+  //#region Jot Calculation
   findCounts = (text, jotId) => {
     if (!text) return;
 
@@ -264,15 +273,11 @@ class Sheet extends Component {
 
     // replace respective jot
     const { jots } = this.state;
-    jots[jotId - 1] = loadedJot;
+    const currentJot = this.findJotIndexFromId(jotId, jots);
+    jots[currentJot] = loadedJot;
 
     // save new jot info
     this.setJots(jots);
-
-    // const { jots, mappedJots } = this.state;
-    // jots[jotId - 1] = loadedJot;
-    // mappedJots[jotId - 1] = this.mapJot(loadedJot);
-    // this.setJotsAndMappedJots(jots, mappedJots);
   };
 
   getLoadedJot = (text, id) => {
@@ -358,54 +363,59 @@ class Sheet extends Component {
     return results;
   };
 
+  //#endregion
+
+  //#region State Management
+
+  /* ----- Jots ----- */
+  setNewJot = (totalJots, id) => {
+    const pagination = this.state.pagination;
+    pagination.totalJots = totalJots;
+    const idCounter = id;
+
+    this.setState((prevState) => ({ ...prevState, pagination, idCounter }));
+  };
+
+  setTotalJots = (totalJots) => {
+    this.setState((prevState) => ({
+      ...prevState,
+      pagination: { ...prevState.pagination, totalJots },
+    }));
+  };
+
+  setCurrentJot = (currentJot) => {
+    this.setState((prevState) => ({
+      ...prevState,
+      pagination: { ...prevState.pagination, currentJot },
+    }));
+  };
+
+  setPagination = (pagination) => {
+    this.setState((prevState) => ({ ...prevState, pagination }));
+  };
+
   setJots = (jots) => {
     this.setState((prevState) => ({ ...prevState, jots }));
   };
 
-  resetJot = (id) => {
-    const emptiedJot = this.getEmptyJot(id);
-    const { jots } = this.state;
+  /* ----- Toggles ----- */
 
-    const jotIndex = this.findJotIndexFromId(id, jots);
-
-    jots[jotIndex] = emptiedJot;
-
-    this.setJots(jots);
-
-    // const { jots, mappedJots } = this.state;
-    // mappedJots[jotIndex] = this.mapJot(emptiedJot);
-    // this.setJotsAndMappedJots(jots, mappedJots);
+  setIsDefaultTheme = () => {
+    const isDefaultTheme = !this.state.isDefaultTheme;
+    this.setState((prevState) => ({ ...prevState, isDefaultTheme }));
   };
 
-  //#endregion
+  resetNav = () => {
+    const nav = { isNavBarOpen: false, isDropDownOpen: false };
 
-  //#region Non-Editing Event Handlers
-  onTextScroll = (e) => {
-    const target = e.target;
-    if (this.state.options.lines || this.state.options.syllables) {
-      const { scrollTop } = target;
-      const { lines, syllables } = this.state.options;
-
-      if (syllables) {
-        let sylTextarea = document.getElementById(`textarea-syllables`);
-        sylTextarea.scrollTop = scrollTop;
-      }
-
-      if (lines) {
-        let lineTextarea = document.getElementById(`textarea-lines`);
-        lineTextarea.scrollTop = scrollTop;
-      }
-    }
+    this.setState((prevState) => ({
+      ...prevState,
+      nav,
+    }));
   };
 
-  onTextClear = () => {
-    const jotId = this.getCurrentJotId();
-    this.resetJot(jotId);
+  /* ----- Events ----- */
 
-    // TODO - this should prob move to navbar
-    const pageText = document.getElementById(`textarea-jot`);
-    pageText.focus();
-  };
   //#endregion
 
   render() {
@@ -442,6 +452,7 @@ class Sheet extends Component {
           addJot={this.addJot}
           removeJot={this.removeJot}
           getCurrentJotId={this.getCurrentJotId}
+          totalJots={this.state.pagination.totalJots}
           {...this.toggles}
         />
         <AlertMessage />
