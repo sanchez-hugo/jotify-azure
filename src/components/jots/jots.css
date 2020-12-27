@@ -38,26 +38,31 @@ textarea.side-textarea::-webkit-scrollbar {
 }
 
 textarea.center-textarea::-webkit-scrollbar {
-  height: 0.5em;
-  width: 0.5em;
-  /* padding-right: 4px; */
-  border-radius: 0.25em;
+  width: 0.6em;
+  height: 0.6em;
 }
+
+/*TODO - make cursor a pointer on scrollbar*/
+/* 
+textarea.center-textarea::-webkit-scrollbar:hover {
+  cursor: pointer;
+} */
 
 textarea.center-textarea::-webkit-scrollbar-track {
   border-radius: 10px;
-  background: rgba(0, 0, 0, 0.1);
+  background: transparent;
 }
 
 textarea.center-textarea::-webkit-scrollbar-thumb {
   border-radius: 10px;
-  background: rgba(0, 0, 0, 0.2);
+  background: #8c8c8c;
 }
 
-textarea.center-textarea::-webkit-scrollbar:hover {
-  background: rgba(0, 0, 0, 0.4);
+textarea.center-textarea::-webkit-scrollbar-thumb:hover,
+textarea.center-textarea::-webkit-scrollbar-thumb:active {
+  background: #3c3c44;
 }
 
-textarea.center-textarea::-webkit-scrollbar:active {
-  background: rgba(0, 0, 0, 0.9);
+textarea.center-textarea::-webkit-scrollbar-corner {
+  display: none;
 }
