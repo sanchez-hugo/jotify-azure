@@ -25,17 +25,39 @@
   color: inherit;
 }
 
+/* .side-textarea {
+  white-space: nowrap;
+} */
+
+textarea.side-textarea::-webkit-scrollbar {
+  display: none;
+}
+
 .center-textarea {
   white-space: nowrap;
 }
 
-textarea::-webkit-scrollbar {
-  background: transparent;
-  height: 0.25em;
-  width: 0.25em;
-  padding-right: 4px;
+textarea.center-textarea::-webkit-scrollbar {
+  height: 0.5em;
+  width: 0.5em;
+  /* padding-right: 4px; */
+  border-radius: 0.25em;
 }
 
-textarea::-webkit-scrollbar-track {
-  background: transparent;
+textarea.center-textarea::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+textarea.center-textarea::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+textarea.center-textarea::-webkit-scrollbar:hover {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+textarea.center-textarea::-webkit-scrollbar:active {
+  background: rgba(0, 0, 0, 0.9);
 }

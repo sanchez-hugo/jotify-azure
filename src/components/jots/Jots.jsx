@@ -70,7 +70,7 @@ const Jots = (props) => {
           <div className={sideColClass}>
             <textarea
               id="textarea-syllables"
-              className={"any-textarea text-right"}
+              className={"any-textarea side-textarea text-right"}
               value={
                 jot.results.syllableResults ? jot.results.syllableResults : ""
               }
@@ -96,7 +96,7 @@ const Jots = (props) => {
           <div className={sideColClass}>
             <textarea
               id="textarea-lines"
-              className={"any-textarea text-left"}
+              className={"any-textarea side-textarea text-left"}
               value={jot.results.lineResults ? jot.results.lineResults : ""}
               readOnly
             />
