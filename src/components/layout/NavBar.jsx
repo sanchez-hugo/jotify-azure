@@ -154,17 +154,19 @@ const NavBar = (props) => {
       if (nav.isNavBarOpen || nav.isDropDownOpen) props.closeMenu();
     };
 
+    const dropdownClass = isDefaultTheme ? "btn-light" : "btn-dark";
+
     return (
       <li
         className={
           nav.isDropDownOpen
-            ? "nav-item col-sm-3 dropdown show"
-            : "nav-item col-sm-3 dropdown"
+            ? `nav-item col-sm-3 dropdown show`
+            : `nav-item col-sm-3 dropdown`
         }
       >
         <button
           id="navbarDropdown"
-          className="btn nav-link "
+          className="btn nav-link"
           aria-haspopup="true"
           aria-expanded={nav.isDropDownOpen ? "true" : "false"}
           aria-label="Toggle dropdown menu"
@@ -180,7 +182,10 @@ const NavBar = (props) => {
           }
           aria-labelledby="navbarDropdown"
         >
-          <button className="btn dropdown-item" onClick={onToggleLinesClick}>
+          <button
+            className={`btn dropdown-item ${dropdownClass}`}
+            onClick={onToggleLinesClick}
+          >
             <p className="my-0">{`Line Counter: ${
               options.lines ? "On" : "Off"
             }`}</p>
@@ -193,16 +198,25 @@ const NavBar = (props) => {
               options.syllables ? "On" : "Off"
             }`}</p>
           </button>
-          <button className="btn dropdown-item" onClick={onToggleWordsClick}>
+          <button
+            className={`btn dropdown-item ${dropdownClass}`}
+            onClick={onToggleWordsClick}
+          >
             <p className="my-0">{`Word Counter: ${
               options.words ? "On" : "Off"
             }`}</p>
           </button>
-          <button className="btn dropdown-item" onClick={onAddSheetClick}>
+          <button
+            className={`btn dropdown-item ${dropdownClass}`}
+            onClick={onAddSheetClick}
+          >
             Add Sheet
           </button>
           {totalJots > 1 ? (
-            <button className="btn dropdown-item" onClick={onRemoveSheetClick}>
+            <button
+              className={`btn dropdown-item ${dropdownClass}`}
+              onClick={onRemoveSheetClick}
+            >
               Remove Sheet
             </button>
           ) : null}
