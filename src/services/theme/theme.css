@@ -1,0 +1,29 @@
+.sheet-light {
+  background-color: #e2e2e2;
+  color: #212529;
+}
+
+.sheet-dark {
+  background-color: #212529;
+  color: #e2e2e2;
+}
+
+.sheet-blue {
+  background-color: #6096ab;
+  color: #f8f9fa;
+}
+
+.sheet-pink {
+  background-color: #b46d89;
+  color: #e2e2e2;
+}
+
+.sheet-light textarea::-webkit-input-placeholder {
+  color: #212529;
+}
+
+.sheet-dark textarea::-webkit-input-placeholder,
+.sheet-pink textarea::-webkit-input-placeholder,
+.sheet-blue textarea::-webkit-input-placeholder {
+  color: #e2e2e2;
+}

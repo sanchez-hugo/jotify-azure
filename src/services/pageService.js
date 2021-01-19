@@ -21,9 +21,9 @@ const doesWordContainSyllable = (word) => {
 const countSyllablesInWord = (word) => {
   // returns number of syllables
   let syllables = 0;
-  const limit = word.length;
   word = word.toLowerCase();
   word = word.replace(/[^a-z]/g, "");
+  const limit = word.length;
 
   for (let i = 0; i < limit; i++) {
     /* Fear not, for this will all be refactored. */
@@ -68,23 +68,36 @@ const countSyllablesInWord = (word) => {
       }
 
       if (thirdNext < limit) {
-        if (word[i] === "a" && word[thirdNext] === "e") {
-          if (fourthNext < limit && word[fourthNext] === "r");
-          else if (word[next] === "b" && word[secondNext] === "l");
-          else if (word[next] === "n" && word[secondNext] === "g") {
-            if (word.substring(limit - 2) === "es");
-            else continue;
-          } else continue;
+        if (word[i] === "a") {
+          if (word[secondNext] === "e") {
+            if (word[next] === "k") {
+              if (word[thirdNext] === "r") {
+                syllables++;
+              }
+            } else if (word[next] === "f") {
+              if (word[thirdNext] === "r") {
+                syllables++;
+              }
+            }
+          } else if (word[thirdNext] === "e") {
+            if (fourthNext < limit && word[fourthNext] === "r");
+            else if (word[next] === "b" && word[secondNext] === "l");
+            else if (word[next] === "n" && word[secondNext] === "g") {
+              if (word.substring(limit - 2) === "es");
+              else continue;
+            } else continue;
+          }
+        } else if (word[i] === "e") {
+        } else if (word[i] === "i" && word[secondNext] === "e") {
+          if (word[next] === "d" && word[thirdNext] === "d") {
+            syllables++;
+          }
         } else if (word[i] === "o" && word[thirdNext] === "e") {
           if (word[next] === "s" && word[secondNext] === "s") {
             if (fourthNext < limit && word[fourthNext] === "s");
             else continue;
           } else if (word[next] === "b" && word[secondNext] === "b") continue;
         } else if (word[i] === "u" && word[secondNext] === "e") {
-          if (word[next] === "d" && word[thirdNext] === "d") {
-            syllables++;
-          }
-        } else if (word[i] === "i" && word[secondNext] === "e") {
           if (word[next] === "d" && word[thirdNext] === "d") {
             syllables++;
           }
@@ -98,26 +111,41 @@ const countSyllablesInWord = (word) => {
           isCharSyllable(word[secondNext])
         )
           continue;
-        else if (word[i] === "a" && word[secondNext] === "e") {
-          if (thirdNext < limit && word[thirdNext] === "d");
-          else if (word[next] !== "k") continue;
-        } else if (word[i] === "e" && word[secondNext] === "e") {
-          if (word[next] === "r" || word[next] === "v") continue;
-        } else if (word[i] === "o" && word[secondNext] === "e") {
-          if (word[next] === "d" && word[thirdNext] === "d");
-          else if (
-            word[next] !== "k" &&
-            word[next] !== "l" &&
-            word[next] !== "c"
-          )
+        else if (word[i] === "a") {
+          if (word[secondNext] === "e") {
+            if (thirdNext < limit && word[thirdNext] === "d");
+            if (word[next] === "k") continue;
+            if (word[next] === "f") continue;
+          }
+        } else if (word[i] === "e") {
+          if (word[secondNext] === "e") {
+            if (secondNext === limit - 1) {
+              if (word[next] === "r") continue;
+              else if (word[next] === "v") continue;
+              else if (word[next] === "m") continue;
+            }
+          }
+        } else if (word[i] === "i") {
+          if (word[secondNext] === "e") {
+            if (secondNext === limit - 1) continue;
+            else if (word[next] === "v" && word[limit - 1] !== "e");
+            else if (word[next] === "n");
+            else continue;
+          }
+        } else if (word[i] === "o") {
+          if (word[secondNext] === "e") {
+            if (word[next] === "d" && word[thirdNext] === "d");
+            else if (
+              word[next] !== "k" &&
+              word[next] !== "l" &&
+              word[next] !== "c"
+            )
+              continue;
+          }
+        } else if (word[i] === "u") {
+          if (word[secondNext] === "e") {
             continue;
-        } else if (word[i] === "i" && word[secondNext] === "e") {
-          if (secondNext === limit - 1) continue;
-          else if (word[next] === "v" && word[limit - 1] !== "e");
-          else if (word[next] === "n");
-          else continue;
-        } else if (word[i] === "u" && word[secondNext] === "e") {
-          continue;
+          }
         }
       }
 

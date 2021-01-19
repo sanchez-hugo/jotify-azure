@@ -1,19 +1,22 @@
 import React, { Component } from "react";
-import NavBar from "../layout/NavBar";
+import NavBar from "../layout/navbar/NavBar";
 import Alert from "../layout/Alert";
+import Footer from "../layout/footer/Footer";
 import Jots from "../jots/Jots";
 import "./sheet.css";
+import "../../services/theme/theme.css";
 import { countSyllablesInWord } from "../../services/pageService";
-import Footer from "../layout/Footer";
+import { themeOptions } from "../../services/theme/themeService";
 
-const secondsOfAlert = 2000;
+const secondsOfAlertMessage = 2000;
 
 class Sheet extends Component {
   state = {
-    isDefaultTheme: true,
+    themeId: 0,
     nav: {
       isNavBarOpen: false,
-      isDropDownOpen: false,
+      isOptionsDropdownOpen: false,
+      isBgDropdownOpen: false,
     },
     options: {
       lines: false,
@@ -151,10 +154,6 @@ class Sheet extends Component {
   //#endregion
 
   //#region Toggles
-  toggleTheme = () => {
-    const isDefaultTheme = !this.state.isDefaultTheme;
-    this.setState((prevState) => ({ ...prevState, isDefaultTheme }));
-  };
 
   toggleLinesOption = () => {
     const lines = !this.state.options.lines;
@@ -189,7 +188,7 @@ class Sheet extends Component {
       }),
       () => {
         if (this.state.options.copied)
-          setTimeout(this.toggleCopiedOption, secondsOfAlert);
+          setTimeout(this.toggleCopiedOption, secondsOfAlertMessage);
       }
     );
   };
@@ -203,7 +202,7 @@ class Sheet extends Component {
       }),
       () => {
         if (this.state.options.cleared)
-          setTimeout(this.toggleClearedOption, secondsOfAlert);
+          setTimeout(this.toggleClearedOption, secondsOfAlertMessage);
       }
     );
   };
@@ -216,24 +215,32 @@ class Sheet extends Component {
     }));
   };
 
-  toggleDropDown = () => {
-    const isDropDownOpen = !this.state.nav.isDropDownOpen;
+  toggleOptionsDropdown = () => {
+    const isOptionsDropdownOpen = !this.state.nav.isOptionsDropdownOpen;
     this.setState((prevState) => ({
       ...prevState,
-      nav: { ...prevState.nav, isDropDownOpen },
+      nav: { ...prevState.nav, isOptionsDropdownOpen },
+    }));
+  };
+
+  toggleBgDropdown = () => {
+    const isBgDropdownOpen = !this.state.nav.isBgDropdownOpen;
+    this.setState((prevState) => ({
+      ...prevState,
+      nav: { ...prevState.nav, isBgDropdownOpen },
     }));
   };
 
   toggles = {
     // Passes all toggles to nav bar
-    toggleBackground: this.toggleTheme,
     toggleSyllables: this.toggleSyllablesOption,
     toggleLines: this.toggleLinesOption,
     toggleWords: this.toggleWordsOption,
     toggleCopied: this.toggleCopiedOption,
     toggleCleared: this.toggleClearedOption,
     toggleNavBar: this.toggleNavBar,
-    toggleDropDown: this.toggleDropDown,
+    toggleDropDown: this.toggleOptionsDropdown,
+    toggleBgDropdown: this.toggleBgDropdown,
   };
 
   toggleJotAddedAlert = () => {
@@ -244,7 +251,7 @@ class Sheet extends Component {
       (prevState) => ({ ...prevState, alerts }),
       () => {
         if (this.state.alerts.wasJotAdded)
-          setTimeout(this.toggleJotAddedAlert, secondsOfAlert);
+          setTimeout(this.toggleJotAddedAlert, secondsOfAlertMessage);
       }
     );
   };
@@ -257,7 +264,7 @@ class Sheet extends Component {
       (prevState) => ({ ...prevState, alerts }),
       () => {
         if (this.state.alerts.wasJotRemoved)
-          setTimeout(this.toggleJotRemovedAlert, secondsOfAlert);
+          setTimeout(this.toggleJotRemovedAlert, secondsOfAlertMessage);
       }
     );
   };
@@ -308,6 +315,10 @@ class Sheet extends Component {
     // TODO - this should prob move to navbar
     const pageText = document.getElementById(`textarea-jot`);
     pageText.focus();
+  };
+
+  changeTheme = (id) => {
+    this.setThemeId(id);
   };
   //#endregion
 
@@ -413,6 +424,10 @@ class Sheet extends Component {
   //#endregion
 
   //#region State Management
+  setThemeId = (themeId) => {
+    this.setState((prevState) => ({ ...prevState, themeId }));
+  };
+
   setIdCounter = (idCounter) => {
     this.setState((prevState) => ({ ...prevState, idCounter }));
   };
@@ -437,12 +452,20 @@ class Sheet extends Component {
   };
 
   resetNav = () => {
-    const nav = { isNavBarOpen: false, isDropDownOpen: false };
+    let { nav } = this.state;
 
-    this.setState((prevState) => ({
-      ...prevState,
-      nav,
-    }));
+    if (nav.isNavBarOpen || nav.isOptionsDropdownOpen || nav.isBgDropdownOpen) {
+      nav = {
+        isNavBarOpen: false,
+        isOptionsDropdownOpen: false,
+        isBgDropdownOpen: false,
+      };
+
+      this.setState((prevState) => ({
+        ...prevState,
+        nav,
+      }));
+    }
   };
 
   //#endregion
@@ -475,33 +498,33 @@ class Sheet extends Component {
     return (
       <div
         className={`container-fluid full-height ${
-          this.state.isDefaultTheme ? "sheet-light" : "sheet-dark"
+          themeOptions[this.state.themeId].style
         }`}
       >
         <NavBar
-          isDefaultTheme={this.state.isDefaultTheme}
+          themeId={this.state.themeId}
           options={this.state.options}
           nav={this.state.nav}
           onTextClear={this.onTextClear}
-          closeMenu={this.resetNav}
+          tryCloseMenu={this.resetNav}
           addJot={this.addJot}
           removeJot={this.removeJot}
           getCurrentJotId={this.getCurrentJotId}
           totalJots={this.state.pagination.totalJots}
+          onThemeClick={this.changeTheme}
           {...this.toggles}
         />
         <AlertMessage />
 
         {this.state.jots.length > 0 ? (
           <Jots
-            isDefaultTheme={this.state.isDefaultTheme}
             jot={this.state.jots[this.state.pagination.currentJot]}
             nav={this.state.nav}
             options={this.state.options}
             onTextChange={this.onTextChange}
             onTextKeyDown={this.onTextKeyDown}
             onTextScroll={this.onTextScroll}
-            closeMenu={this.resetNav}
+            tryCloseMenu={this.resetNav}
             nextJot={this.nextJot}
             prevJot={this.prevJot}
           />
@@ -509,7 +532,6 @@ class Sheet extends Component {
 
         {this.state.jots.length > 0 ? (
           <Footer
-            isDefaultTheme={this.state.isDefaultTheme}
             counts={this.state.jots[this.state.pagination.currentJot].counts}
             options={this.state.options}
             pagination={this.state.pagination}

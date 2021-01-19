@@ -1,6 +1,6 @@
 import React from "react";
 import "./footer.css";
-import Pagination from "../layout/Pagination";
+import Pagination from "../Pagination";
 
 const Footer = (props) => {
   if (props.options.words || props.jotCount > 1)

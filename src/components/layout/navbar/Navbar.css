@@ -1,0 +1,9 @@
+.small-form {
+  padding-left: 1em;
+}
+
+@media screen and (min-width: 800px) {
+  .small-form {
+    display: none;
+  }
+}
