@@ -12,10 +12,19 @@ import {
   BsGrid3X3Gap,
 } from "react-icons/bs";
 import screenfull from "screenfull";
-import InfoModal from "../modals/InfoModal";
+import InfoModal from "../../modals/InfoModal";
+import "../../../services/theme/theme.css";
+import { themeOptions } from "../../../services/theme/themeService";
 
 const NavBar = (props) => {
-  const { isDefaultTheme, nav, options, totalJots } = props;
+  const {
+    nav,
+    options,
+    totalJots,
+    themeId,
+    onThemeClick,
+    tryCloseMenu,
+  } = props;
 
   const [isFullscreen, setIsFullscreen] = useState(false);
 
@@ -26,7 +35,7 @@ const NavBar = (props) => {
         screenfull.request();
         setIsFullscreen(true);
       }
-      if (nav.isNavBarOpen || nav.isDropDownOpen) props.closeMenu();
+      tryCloseMenu();
     };
 
     const onCollapseClick = () => {
@@ -34,7 +43,7 @@ const NavBar = (props) => {
         screenfull.exit();
         setIsFullscreen(false);
       }
-      if (nav.isNavBarOpen || nav.isDropDownOpen) props.closeMenu();
+      tryCloseMenu();
     };
 
     return screenfull.isEnabled ? (
@@ -53,7 +62,7 @@ const NavBar = (props) => {
     const onClearClick = (e) => {
       e.preventDefault();
       props.onTextClear();
-      if (nav.isNavBarOpen || nav.isDropDownOpen) props.closeMenu();
+      tryCloseMenu();
       props.toggleCleared();
     };
 
@@ -81,7 +90,7 @@ const NavBar = (props) => {
       pageText.blur();
 
       props.toggleCopied();
-      if (nav.isNavBarOpen || nav.isDropDownOpen) props.closeMenu();
+      tryCloseMenu();
     };
 
     return (
@@ -100,17 +109,64 @@ const NavBar = (props) => {
   //#endregion
 
   //#region Right Side
-  const BackgroundNavItem = () => {
-    const onBackgroundClick = () => {
-      props.toggleBackground();
-      if (nav.isNavBarOpen || nav.isDropDownOpen) props.closeMenu();
+  const ThemeNavItem = () => {
+    const ThemeButtons = () => {
+      const themeButtons = [];
+      themeOptions.forEach((theme) => {
+        const onBgThemeClick = () => {
+          onThemeClick(theme.id);
+          tryCloseMenu();
+        };
+
+        let currentButton = (
+          <button
+            key={theme.id}
+            className={`btn dropdown-item ${themeOptions[themeId].style}`}
+            onClick={onBgThemeClick}
+            disabled={theme.id === themeId}
+          >
+            <p className="my-0">{`${theme.name}`}</p>
+          </button>
+        );
+
+        themeButtons.push(currentButton);
+      });
+      return themeButtons;
+    };
+
+    const onBgDropdownClick = () => {
+      props.toggleBgDropdown();
     };
 
     return (
-      <li className="nav-item col-sm-3" onClick={onBackgroundClick}>
-        <button className="btn nav-link">
+      <li
+        className={
+          nav.isBgDropdownOpen
+            ? `nav-item col-sm-3 dropdown show`
+            : `nav-item col-sm-3 dropdown`
+        }
+      >
+        <button
+          id="backgroundDropdown"
+          className="btn nav-link"
+          aria-haspopup="true"
+          aria-expanded={nav.isBgDropdownOpen ? "true" : "false"}
+          aria-label="Toggle dropdown menu"
+          onClick={onBgDropdownClick}
+        >
+          {/* {nav.isBgDropdownOpen ? <BsFillCaretUpFill /> : <BsFillCaretDownFill />} */}
           <BsCircleHalf />
         </button>
+        <div
+          className={
+            nav.isBgDropdownOpen
+              ? "py-0 dropdown-menu dropdown-menu-right show"
+              : "py-0 dropdown-menu dropdown-menu-right"
+          }
+          aria-labelledby="backgroundDropdown"
+        >
+          <ThemeButtons />
+        </div>
       </li>
     );
   };
@@ -118,7 +174,7 @@ const NavBar = (props) => {
   const InfoNavItem = () => {
     return (
       <li className="nav-item col-sm-3">
-        <InfoModal isDefaultTheme={isDefaultTheme} />
+        <InfoModal themeId={themeId} />
       </li>
     );
   };
@@ -131,35 +187,33 @@ const NavBar = (props) => {
 
     const onToggleLinesClick = () => {
       props.toggleLines();
-      if (nav.isNavBarOpen || nav.isDropDownOpen) props.closeMenu();
+      tryCloseMenu();
     };
 
     const onToggleSyllablesClick = () => {
       props.toggleSyllables();
-      if (nav.isNavBarOpen || nav.isDropDownOpen) props.closeMenu();
+      tryCloseMenu();
     };
 
     const onToggleWordsClick = () => {
       props.toggleWords();
-      if (nav.isNavBarOpen || nav.isDropDownOpen) props.closeMenu();
+      tryCloseMenu();
     };
 
     const onAddSheetClick = () => {
       props.addJot();
-      if (nav.isNavBarOpen || nav.isDropDownOpen) props.closeMenu();
+      tryCloseMenu();
     };
 
     const onRemoveSheetClick = () => {
       props.removeJot();
-      if (nav.isNavBarOpen || nav.isDropDownOpen) props.closeMenu();
+      tryCloseMenu();
     };
-
-    const dropdownClass = isDefaultTheme ? "btn-light" : "btn-dark";
 
     return (
       <li
         className={
-          nav.isDropDownOpen
+          nav.isOptionsDropdownOpen
             ? `nav-item col-sm-3 dropdown show`
             : `nav-item col-sm-3 dropdown`
         }
@@ -168,24 +222,21 @@ const NavBar = (props) => {
           id="navbarDropdown"
           className="btn nav-link"
           aria-haspopup="true"
-          aria-expanded={nav.isDropDownOpen ? "true" : "false"}
+          aria-expanded={nav.isOptionsDropdownOpen ? "true" : "false"}
           aria-label="Toggle dropdown menu"
           onClick={onNavDropDownClick}
         >
-          {nav.isDropDownOpen ? <BsFillCaretUpFill /> : <BsFillCaretDownFill />}
+          {nav.isOptionsDropdownOpen ? <BsFillCaretUpFill /> : <BsFillCaretDownFill />}
         </button>
         <div
           className={
-            nav.isDropDownOpen
+            nav.isOptionsDropdownOpen
               ? "py-0 dropdown-menu dropdown-menu-right show"
               : "py-0 dropdown-menu dropdown-menu-right"
           }
           aria-labelledby="navbarDropdown"
         >
-          <button
-            className={`btn dropdown-item ${dropdownClass}`}
-            onClick={onToggleLinesClick}
-          >
+          <button className={`btn dropdown-item`} onClick={onToggleLinesClick}>
             <p className="my-0">{`Line Counter: ${
               options.lines ? "On" : "Off"
             }`}</p>
@@ -198,23 +249,17 @@ const NavBar = (props) => {
               options.syllables ? "On" : "Off"
             }`}</p>
           </button>
-          <button
-            className={`btn dropdown-item ${dropdownClass}`}
-            onClick={onToggleWordsClick}
-          >
+          <button className={`btn dropdown-item`} onClick={onToggleWordsClick}>
             <p className="my-0">{`Word Counter: ${
               options.words ? "On" : "Off"
             }`}</p>
           </button>
-          <button
-            className={`btn dropdown-item ${dropdownClass}`}
-            onClick={onAddSheetClick}
-          >
+          <button className={`btn dropdown-item`} onClick={onAddSheetClick}>
             Add Sheet
           </button>
           {totalJots > 1 ? (
             <button
-              className={`btn dropdown-item ${dropdownClass}`}
+              className={`btn dropdown-item`}
               onClick={onRemoveSheetClick}
             >
               Remove Sheet
@@ -253,13 +298,7 @@ const NavBar = (props) => {
   };
 
   return (
-    <nav
-      className={
-        isDefaultTheme
-          ? "navbar navbar-expand-sm navbar-light nav-light"
-          : "navbar navbar-expand-sm navbar-dark nav-dark"
-      }
-    >
+    <nav className={"navbar navbar-expand-sm"}>
       <NavBarToggleButton />
       <div
         className={
@@ -279,7 +318,7 @@ const NavBar = (props) => {
 
         <ul className="navbar-nav ml-auto">
           <div className="row justify-content-center text-center">
-            <BackgroundNavItem />
+            <ThemeNavItem />
             <InfoNavItem />
             <DropdownNavItem />
           </div>

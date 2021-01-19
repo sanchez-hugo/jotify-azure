@@ -3,10 +3,10 @@ import "./jots.css";
 
 const Jots = (props) => {
   const [isCtrlActive, setIsCtrlActive] = useState(false);
-  const { options, jot, nav } = props;
+  const { options, jot } = props;
 
   const onPageClick = () => {
-    if (nav.isNavBarOpen || nav.isDropDownOpen) props.closeMenu();
+    props.tryCloseMenu();
   };
 
   const onJotTextChange = (e) => {

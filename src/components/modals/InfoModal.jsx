@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { BsInfoCircleFill, BsXCircleFill } from "react-icons/bs";
+import { themeOptions } from "../../services/theme/themeService";
+import "../../services/theme/theme.css";
 import "./InfoModal.css";
 
 const InfoModal = (props) => {
@@ -34,15 +36,11 @@ const InfoModal = (props) => {
         style={isModalActive ? { display: "block" } : { display: "none" }}
         onClick={closeModal}
       >
-        <div className="modal-dialog modal-dialog-centered" role="document">
+        <div className={`modal-dialog modal-dialog-centered`} role="document">
           <div
-            className={`modal-content ${
-              props.isDefaultTheme
-                ? "bg-light text-secondary"
-                : "bg-dark text-white"
-            }`}
+            className={`modal-content`}
           >
-            <div className="modal-header">
+            <div className={`modal-header ${themeOptions[props.themeId].style}`}>
               <h5 className="modal-title" id="infoModal-title">
                 Jotify
               </h5>
@@ -53,15 +51,12 @@ const InfoModal = (props) => {
                 aria-label="Close"
                 onClick={closeModal}
               >
-                <span
-                  aria-hidden={isModalActive ? "false" : "true"}
-                  className={props.isDefaultTheme ? "text-dark" : "text-white"}
-                >
+                <span aria-hidden={isModalActive ? "false" : "true"}>
                   <BsXCircleFill />
                 </span>
               </button>
             </div>
-            <div className="modal-body">
+            <div className={`modal-body ${themeOptions[props.themeId].style}`}>
               <p>
                 As someone who is a fan of{" "}
                 <a
@@ -87,12 +82,8 @@ const InfoModal = (props) => {
                 not be useful.
               </p>
             </div>
-            <div className="modal-footer">
-              <small
-                className={
-                  props.isDefaultTheme ? "text-secondary" : "text-white"
-                }
-              >
+            <div className={`modal-footer ${themeOptions[props.themeId].style}`}>
+              <small className={themeOptions[props.themeId].style}>
                 I would love to hear some feedback after I've reached a good
                 point in development. Please stay tuned. In the mean time, keep
                 jotting!
