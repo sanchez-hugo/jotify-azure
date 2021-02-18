@@ -18,6 +18,42 @@
   color: #e2e2e2;
 }
 
+.sheet-dm-light {
+  background-color: #e2e2e2 !important;
+}
+
+.sheet-dm-dark {
+  background-color: #212529 !important;
+}
+
+.sheet-dm-blue {
+  background-color: #6096ab !important;
+}
+
+.sheet-dm-pink {
+  background-color: #b46d89 !important;
+}
+
+.sheet-di-light {
+  background-color: #e2e2e2 !important;
+  color: #212529 !important;
+}
+
+.sheet-di-dark {
+  background-color: #212529 !important;
+  color: #e2e2e2 !important;
+}
+
+.sheet-di-blue {
+  background-color: #6096ab !important;
+  color: #e2e2e2 !important;
+}
+
+.sheet-di-pink {
+  background-color: #b46d89 !important;
+  color: #e2e2e2 !important;
+}
+
 .sheet-light textarea::-webkit-input-placeholder {
   color: #212529;
 }
