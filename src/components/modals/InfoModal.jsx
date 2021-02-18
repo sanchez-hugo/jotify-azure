@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { IconContext } from "react-icons/lib";
 import { BsInfoCircleFill, BsXCircleFill } from "react-icons/bs";
 import { themeOptions } from "../../services/theme/themeService";
 import "../../services/theme/theme.css";
@@ -15,6 +16,8 @@ const InfoModal = (props) => {
     setIsModalActive(false);
   };
 
+  const iconColor = themeOptions[props.themeId].iconColor;
+
   return (
     <>
       <button
@@ -23,7 +26,9 @@ const InfoModal = (props) => {
         data-target="#infoModal"
         onClick={onButtonClick}
       >
-        <BsInfoCircleFill />
+        <IconContext.Provider value={iconColor}>
+          <BsInfoCircleFill />
+        </IconContext.Provider>
       </button>
 
       <div
@@ -37,10 +42,10 @@ const InfoModal = (props) => {
         onClick={closeModal}
       >
         <div className={`modal-dialog modal-dialog-centered`} role="document">
-          <div
-            className={`modal-content`}
-          >
-            <div className={`modal-header ${themeOptions[props.themeId].style}`}>
+          <div className={`modal-content`}>
+            <div
+              className={`modal-header ${themeOptions[props.themeId].style}`}
+            >
               <h5 className="modal-title" id="infoModal-title">
                 Jotify
               </h5>
@@ -82,7 +87,9 @@ const InfoModal = (props) => {
                 not be useful.
               </p>
             </div>
-            <div className={`modal-footer ${themeOptions[props.themeId].style}`}>
+            <div
+              className={`modal-footer ${themeOptions[props.themeId].style}`}
+            >
               <small className={themeOptions[props.themeId].style}>
                 I would love to hear some feedback after I've reached a good
                 point in development. Please stay tuned. In the mean time, keep
