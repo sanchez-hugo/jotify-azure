@@ -8,13 +8,13 @@ import {
   BsArrowsAngleContract,
   BsBackspace,
   BsClipboard,
-  // BsFillEnvelopeFill,
   BsGrid3X3Gap,
 } from "react-icons/bs";
 import screenfull from "screenfull";
 import InfoModal from "../../modals/InfoModal";
 import "../../../services/theme/theme.css";
 import { themeOptions } from "../../../services/theme/themeService";
+import { IconContext } from "react-icons/lib";
 
 const NavBar = (props) => {
   const {
@@ -27,6 +27,8 @@ const NavBar = (props) => {
   } = props;
 
   const [isFullscreen, setIsFullscreen] = useState(false);
+
+  const iconColor = themeOptions[themeId].iconColor;
 
   //#region Left Side
   const FullscreenNavItem = () => {
@@ -52,7 +54,8 @@ const NavBar = (props) => {
           className="btn nav-link"
           onClick={isFullscreen ? onCollapseClick : onExpandClick}
         >
-          {isFullscreen ? <BsArrowsAngleContract /> : <BsArrowsAngleExpand />}
+          <IconContext.Provider value={iconColor}>
+          {isFullscreen ? <BsArrowsAngleContract /> : <BsArrowsAngleExpand />}</IconContext.Provider>
         </button>
       </li>
     ) : null;
@@ -73,7 +76,9 @@ const NavBar = (props) => {
           onClick={onClearClick}
           disabled={options.copied || options.cleared ? true : false}
         >
+          <IconContext.Provider value={iconColor}>
           <BsBackspace />
+          </IconContext.Provider>
         </button>
       </li>
     );
@@ -100,7 +105,9 @@ const NavBar = (props) => {
           onClick={onCopyClick}
           disabled={options.copied || options.cleared ? true : false}
         >
+          <IconContext.Provider value={iconColor}>
           <BsClipboard />
+          </IconContext.Provider>
         </button>
       </li>
     );
@@ -154,8 +161,9 @@ const NavBar = (props) => {
           aria-label="Toggle dropdown menu"
           onClick={onBgDropdownClick}
         >
-          {/* {nav.isBgDropdownOpen ? <BsFillCaretUpFill /> : <BsFillCaretDownFill />} */}
-          <BsCircleHalf />
+          <IconContext.Provider value={iconColor}>
+            <BsCircleHalf />
+          </IconContext.Provider>
         </button>
         <div
           className={
@@ -226,7 +234,13 @@ const NavBar = (props) => {
           aria-label="Toggle dropdown menu"
           onClick={onNavDropDownClick}
         >
-          {nav.isOptionsDropdownOpen ? <BsFillCaretUpFill /> : <BsFillCaretDownFill />}
+          <IconContext.Provider value={iconColor}>
+            {nav.isOptionsDropdownOpen ? (
+              <BsFillCaretUpFill />
+            ) : (
+              <BsFillCaretDownFill />
+            )}
+          </IconContext.Provider>
         </button>
         <div
           className={
@@ -292,7 +306,9 @@ const NavBar = (props) => {
         aria-label="Toggle navigation"
         onClick={onNavBarClick}
       >
-        <BsGrid3X3Gap />
+        <IconContext.Provider value={iconColor}>
+          <BsGrid3X3Gap />
+        </IconContext.Provider>
       </button>
     );
   };
