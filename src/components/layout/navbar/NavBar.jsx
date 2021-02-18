@@ -128,7 +128,7 @@ const NavBar = (props) => {
         let currentButton = (
           <button
             key={theme.id}
-            className={`btn dropdown-item ${themeOptions[themeId].style}`}
+            className={`btn dropdown-item ${theme.dropdownItem}`}
             onClick={onBgThemeClick}
             disabled={theme.id === themeId}
           >
@@ -168,7 +168,7 @@ const NavBar = (props) => {
         <div
           className={
             nav.isBgDropdownOpen
-              ? "py-0 dropdown-menu dropdown-menu-right show"
+              ? `py-0 dropdown-menu dropdown-menu-right show ${themeOptions[themeId].dropdown}`
               : "py-0 dropdown-menu dropdown-menu-right"
           }
           aria-labelledby="backgroundDropdown"
