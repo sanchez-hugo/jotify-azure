@@ -245,30 +245,30 @@ const NavBar = (props) => {
         <div
           className={
             nav.isOptionsDropdownOpen
-              ? "py-0 dropdown-menu dropdown-menu-right show"
+              ? `py-0 dropdown-menu dropdown-menu-right show ${themeOptions[themeId].dropdown}`
               : "py-0 dropdown-menu dropdown-menu-right"
           }
           aria-labelledby="navbarDropdown"
         >
-          <button className={`btn dropdown-item`} onClick={onToggleLinesClick}>
+          <button className={`btn dropdown-item ${themeOptions[themeId].dropdownItem}`} onClick={onToggleLinesClick}>
             <p className="my-0">{`Line Counter: ${
               options.lines ? "On" : "Off"
             }`}</p>
           </button>
           <button
-            className="btn dropdown-item"
+            className={`btn dropdown-item ${themeOptions[themeId].dropdownItem}`}
             onClick={onToggleSyllablesClick}
           >
             <p className="my-0">{`Syllable Counter: ${
               options.syllables ? "On" : "Off"
             }`}</p>
           </button>
-          <button className={`btn dropdown-item`} onClick={onToggleWordsClick}>
+          <button className={`btn dropdown-item ${themeOptions[themeId].dropdownItem}`} onClick={onToggleWordsClick}>
             <p className="my-0">{`Word Counter: ${
               options.words ? "On" : "Off"
             }`}</p>
           </button>
-          <button className={`btn dropdown-item`} onClick={onAddSheetClick}>
+          <button className={`btn dropdown-item ${themeOptions[themeId].dropdownItem}`} onClick={onAddSheetClick}>
             Add Sheet
           </button>
           {totalJots > 1 ? (
