@@ -520,6 +520,7 @@ class Sheet extends Component {
           <Jots
             jot={this.state.jots[this.state.pagination.currentJot]}
             nav={this.state.nav}
+            themeId={this.state.themeId}
             options={this.state.options}
             onTextChange={this.onTextChange}
             onTextKeyDown={this.onTextKeyDown}

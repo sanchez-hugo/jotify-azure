@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { themeOptions } from "../../services/theme/themeService";
 import "./jots.css";
 
 const Jots = (props) => {
@@ -84,7 +85,7 @@ const Jots = (props) => {
             autoFocus
             id={`textarea-jot`}
             placeholder="Jot away..."
-            className={`any-textarea center-textarea`}
+            className={`any-textarea center-textarea ${themeOptions[props.themeId].scroll} ${themeOptions[props.themeId].select}`}
             onChange={onJotTextChange}
             onScroll={onJotScroll}
             onKeyDown={onJotTextKeyDown}

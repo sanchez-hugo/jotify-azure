@@ -1,21 +1,45 @@
 .sheet-light {
   background-color: #e2e2e2;
   color: #212529;
+  caret-color: black;
 }
 
 .sheet-dark {
   background-color: #212529;
   color: #e2e2e2;
+  caret-color: white;
 }
 
 .sheet-blue {
   background-color: #6096ab;
   color: #f8f9fa;
+  caret-color: white;
 }
 
 .sheet-pink {
   background-color: #b46d89;
   color: #e2e2e2;
+  caret-color: white;
+}
+
+.sheet-select-light::selection {
+  color: #e2e2e2;
+  background-color: #212529;
+}
+
+.sheet-select-dark::selection {
+  color: #212529;
+  background-color: #e2e2e2;
+}
+
+.sheet-select-blue::selection {
+  color: #6096ab;
+  background-color: #f8f9fa;
+}
+
+.sheet-select-pink::selection {
+  color: #b46d89;
+  background-color: #e2e2e2;
 }
 
 .sheet-dm-light {
@@ -32,6 +56,38 @@
 
 .sheet-dm-pink {
   background-color: #b46d89 !important;
+}
+
+.sheet-thumb-light::-webkit-scrollbar-thumb {
+  background-color: #C9C9C9;
+}
+
+.sheet-thumb-dark::-webkit-scrollbar-thumb {
+  background-color: #3B3F43 !important;
+}
+
+.sheet-thumb-blue::-webkit-scrollbar-thumb {
+  background-color: #477D92 !important;
+}
+
+.sheet-thumb-pink::-webkit-scrollbar-thumb {
+  background-color: #9B5470 !important;
+}
+
+.sheet-thumb-light::-webkit-scrollbar-thumb:hover {
+  background-color: #969696 !important;
+}
+
+.sheet-thumb-dark::-webkit-scrollbar-thumb:hover {
+  background-color: #6E7276 !important;
+}
+
+.sheet-thumb-blue::-webkit-scrollbar-thumb:hover {
+  background-color: #144A5F !important;
+}
+
+.sheet-thumb-pink::-webkit-scrollbar-thumb:hover {
+  background-color: #68213D !important;
 }
 
 .sheet-di-light {
