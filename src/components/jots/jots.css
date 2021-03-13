@@ -42,7 +42,6 @@ textarea.center-textarea::-webkit-scrollbar {
   height: 0.6em;
 }
 
-/*TODO - make cursor a pointer on scrollbar*/
 /* 
 textarea.center-textarea::-webkit-scrollbar:hover {
   cursor: pointer;

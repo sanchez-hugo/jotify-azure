@@ -12,7 +12,7 @@ const secondsOfAlertMessage = 2000;
 
 class Sheet extends Component {
   state = {
-    themeId: 0,
+    themeId: 1,
     nav: {
       isNavBarOpen: false,
       isOptionsDropdownOpen: false,
