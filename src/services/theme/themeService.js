@@ -14,6 +14,8 @@ const themeOptions = [
     style: "sheet-light",
     dropdown: "sheet-dm-light",
     dropdownItem: "sheet-di-light",
+    scroll: "sheet-thumb-light",
+    select: "sheet-select-light",
     iconColor: { color: darkColor },
   },
   {
@@ -22,6 +24,8 @@ const themeOptions = [
     style: "sheet-dark",
     dropdown: "sheet-dm-dark",
     dropdownItem: "sheet-di-dark",
+    scroll: "sheet-thumb-dark",
+    select: "sheet-select-dark",
     iconColor: { color: lightColor },
   },
   {
@@ -30,6 +34,8 @@ const themeOptions = [
     style: "sheet-blue",
     dropdown: "sheet-dm-blue",
     dropdownItem: "sheet-di-blue",
+    scroll: "sheet-thumb-blue",
+    select: "sheet-select-blue",
     iconColor: { color: lightColor },
   },
   {
@@ -38,6 +44,8 @@ const themeOptions = [
     style: "sheet-pink",
     dropdown: "sheet-dm-pink",
     dropdownItem: "sheet-di-pink",
+    scroll: "sheet-thumb-pink",
+    select: "sheet-select-pink",
     iconColor: { color: lightColor },
   },
 ];

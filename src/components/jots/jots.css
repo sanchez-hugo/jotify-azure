@@ -1,6 +1,14 @@
+:root {
+    --light-theme: #e2e2e2;
+    --dark-theme: #212529;
+    --blue-theme: #6096ab;
+    --pink-theme: #b46d89;
+}
+
 .jot-container {
   height: 1000px;
   color: inherit;
+  caret-color: inherit;
 }
 
 .text-container {
@@ -9,12 +17,12 @@
 
 .any-textarea {
   appearance: none;
-  height: 70vh;
+  height: 80vh;
   background: transparent;
   border: none;
   outline: none;
   font-family: monospace;
-  font-size: 1em;
+  font-size: 1.1em;
   letter-spacing: 0.1em;
   padding-top: 1em;
   padding-bottom: 1em;
@@ -25,9 +33,9 @@
   color: inherit;
 }
 
-/* .side-textarea {
-  white-space: nowrap;
-} */
+.side-textarea {
+  overflow: hidden;
+}
 
 textarea.side-textarea::-webkit-scrollbar {
   display: none;
@@ -35,17 +43,13 @@ textarea.side-textarea::-webkit-scrollbar {
 
 .center-textarea {
   white-space: nowrap;
+  cursor: text;
 }
 
 textarea.center-textarea::-webkit-scrollbar {
-  width: 0.6em;
+  width: 0.8em;
   height: 0.6em;
 }
-
-/* 
-textarea.center-textarea::-webkit-scrollbar:hover {
-  cursor: pointer;
-} */
 
 textarea.center-textarea::-webkit-scrollbar-track {
   border-radius: 10px;
@@ -54,12 +58,6 @@ textarea.center-textarea::-webkit-scrollbar-track {
 
 textarea.center-textarea::-webkit-scrollbar-thumb {
   border-radius: 10px;
-  background: #8c8c8c;
-}
-
-textarea.center-textarea::-webkit-scrollbar-thumb:hover,
-textarea.center-textarea::-webkit-scrollbar-thumb:active {
-  background: #3c3c44;
 }
 
 textarea.center-textarea::-webkit-scrollbar-corner {
