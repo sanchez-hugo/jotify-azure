@@ -5,7 +5,7 @@ import Footer from "../layout/footer/Footer";
 import Jots from "../jots/Jots";
 import "./sheet.css";
 import "../../services/theme/theme.css";
-import { countSyllablesInWord } from "../../services/pageService";
+import { countSyllablesInWord, countSyllablesInWordV2, countSyllablesInWordV3 } from "../../services/pageService";
 import { themeOptions } from "../../services/theme/themeService";
 
 const secondsOfAlertMessage = 2000;
@@ -373,7 +373,7 @@ class Sheet extends Component {
           if (word !== "") {
             wordCount++;
             wordsInLine++;
-            const syllablesInWord = countSyllablesInWord(word);
+            const syllablesInWord = countSyllablesInWordV2(word);
             syllableCount += syllablesInWord;
             syllablesInLine += syllablesInWord;
           }
